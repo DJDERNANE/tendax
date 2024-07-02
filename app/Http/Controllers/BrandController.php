@@ -49,7 +49,7 @@ class BrandController extends Controller
     
         
      
-      return $request->name;
+      return redirect()->route('brands.all');
     }
 
     /**
@@ -71,7 +71,7 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        //
+        return view('admin.store.editBrand', compact('brand')); 
     }
 
     /**
@@ -82,9 +82,35 @@ class BrandController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Brand $brand)
-    {
-        //
+{
+    // Validate the request data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    // Check if a new picture file has been uploaded
+    if ($request->hasFile('picture')) {
+        // Get the original name of the uploaded file
+        $imageName = $request->file('picture')->getClientOriginalName();
+        
+        // Store the file in the 'Brands' directory with the original name
+        $image = $request->file('picture')->storeAs('./Brands', $imageName, 'pictures');
+
+        // Update the brand's picture
+        $brand->picture = $imageName;
     }
+
+    // Update the brand's name
+    $brand->name = $request->name;
+    
+    // Save the updated brand
+    $brand->save();
+
+    // Redirect to the 'brands.all' route with a success message
+    return redirect()->route('brands.all')->with('success', 'Brand updated successfully.');
+}
+
 
     /**
      * Remove the specified resource from storage.

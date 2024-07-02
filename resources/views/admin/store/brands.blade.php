@@ -77,7 +77,7 @@
                 <td>{{$item->name}}</td>
                 <td> <img class="col-3 mx-auto shadow-sm bg-white" width="50" height="50" src="{{ asset('pictures/Brands/'.$item->picture) }}" alt="image"></td>
                 <td>
-                    <a href="{{route('admin.product.edit', $item->id)}}" target="_blanck">
+                    <a href="{{route('brands.edit', $item->id)}}" target="_blanck">
                         <button class="btn btn-primary">
                             <i class="bi bi-pencil-square"></i>
                         </button>    

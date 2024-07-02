@@ -202,6 +202,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'adminpanel'], function()
         //brands
         Route::get('/brands',[BrandController::class, 'index'])->name('brands.all');
         Route::post('/brands/store',[BrandController::class, 'store'])->name('brands.store');
+        Route::get('/brands/edit/{brand}',[BrandController::class, 'edit'])->name('brands.edit');
+        Route::post('/brands/update/{brand}',[BrandController::class, 'update'])->name('brands.update');
         Route::delete('/brands/delete',[BrandController::class, 'destroy'])->name('brands.destroy');
         
     
