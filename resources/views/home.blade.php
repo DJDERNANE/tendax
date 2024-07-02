@@ -479,7 +479,7 @@
                                 <img class='mx-auto py-2' src="{{ asset('pictures/Products/'.$item->picture) }}"alt="Card image cap">
                                 <div class="p-2 desc">
                                     <p class="font-weight-bold mb-1">{{$item->name}}</p>
-                                    <p class="marque mb-1"><span>Marque </span>{{$item->category->name}}</p>
+                                    <p class="marque mb-1"><span>Marque </span>{{$item->brand->name}}</p>
                                     <div>
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>

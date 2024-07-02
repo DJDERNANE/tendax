@@ -1,11 +1,11 @@
 
 
-
 <?php $__env->startSection('title', 'Ajouter Produit'); ?>
 <?php $__env->startSection('content'); ?>
     <div class="bg-white rounded-3 container my-5  p-4 ">
         <h3>Ajouter Produit</h3>
-        <form action="<?php echo e(route('admin.products.store')); ?>" method="post" enctype="multipart/form-data" class="fs-5 my-4 addproduct">
+        <form action="<?php echo e(route('admin.products.store')); ?>" method="post" enctype="multipart/form-data"
+            class="fs-5 my-4 addproduct">
             <?php echo csrf_field(); ?>
             <div class="row">
                 <div class="col-8">
@@ -73,22 +73,13 @@
                         </div>
                         <div class="my-4 col-6">
                             <label for="cat">Categories</label>
-                            <select name="cat" id="cat" class="px-2 py-2 bg-light border-0 rounded my-2"> <br>
-                                <option value="" selected>Selectionner</option>
-                                <?php $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
+                            <select name="cats[]" id="categories" multiple>
+                                <?php $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
-                        <div class="my-4 col-6">
-                            <label for="subcat">Sous Categories</label>
-                            <select name="subcat" id="subcat" class="px-2 py-2 bg-light border-0 rounded my-2"> <br>
-                                <option value="" selected>Selectionner</option>
-                                <?php $__currentLoopData = $subcats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
-                        </div>
+
                         <div class="my-4 col-12">
                             <label for="brand">Marque : </label>
                             <div class="row">
@@ -149,7 +140,7 @@
         </form>
 
 
-       
+
 
     </div>
 
@@ -167,25 +158,40 @@
                 console.error(error);
             });
     </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const remiseValue = document.querySelector('#remise');
-        const remiseDate = document.querySelector('#dateremise');
-        if (remiseValue.value > 0) {
-            remiseDate.style.display = 'flex';
-        } else {
-            remiseDate.style.display = 'none';
-        }
-
-        remiseValue.addEventListener('change', function() {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const remiseValue = document.querySelector('#remise');
+            const remiseDate = document.querySelector('#dateremise');
             if (remiseValue.value > 0) {
                 remiseDate.style.display = 'flex';
             } else {
                 remiseDate.style.display = 'none';
             }
+
+            remiseValue.addEventListener('change', function() {
+                if (remiseValue.value > 0) {
+                    remiseDate.style.display = 'flex';
+                } else {
+                    remiseDate.style.display = 'none';
+                }
+            });
         });
-    });
-</script>
+    </script>
+    <script>
+        new MultiSelectTag('categories', {
+            rounded: true, // default true
+            shadow: true, // default false
+            placeholder: 'Search', // default Search...
+            tagColor: {
+                textColor: '#327b2c',
+                borderColor: '#92e681',
+                bgColor: '#eaffe6',
+            },
+            onChange: function(values) {
+                console.log(values)
+            }
+        })
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.adminStorePanel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\tendaxe\resources\views/admin/store/addProduct.blade.php ENDPATH**/ ?>

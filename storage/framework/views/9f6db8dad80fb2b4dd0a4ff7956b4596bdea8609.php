@@ -3,7 +3,7 @@
 <?php $__env->startSection('title', 'Products'); ?>
 <?php $__env->startSection('content'); ?>
 
-    <div class="container my-4">
+    <div class="container my-5 pt-5">
         <div  class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
                 <h6><a href="<?php echo e(route('products.pending.all')); ?>" class="me-2">En Attente</a> </h6>

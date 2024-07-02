@@ -40,6 +40,7 @@ class CategoryController extends Controller
     public function store(Request $request)
 {
     try {
+        
         if ($request->hasFile('picture')) {
             $iconName = '';
             $imageName = $request->file('picture')->getClientOriginalName();
@@ -48,13 +49,17 @@ class CategoryController extends Controller
                 $iconName = $request->file('icon')->getClientOriginalName();
                 $icon = $request->file('icon')->storeAs('./Category/Icons',$iconName,'pictures');
             }
+            $parent = Category::find($request->parent_id);
+            $level = $parent ? $parent->level + 1 : 0;
             Category::create([
                 'icon' => $iconName,
+                'parent_id' => $request->parent_id,
+                'level' => $level,
                 'name' => $request->name,
                 'picture' => $imageName // This will be null if no file was uploaded
             ]);
            
-            return redirect()->route('categories.all');
+            return redirect()->route('categories.level', ['level' => $level])->with('success', 'Category added successfully!');
         }
     } catch (\Throwable $th) {
         return $th;
@@ -126,5 +131,11 @@ class CategoryController extends Controller
             $category->delete();
         }
         return response()->json(['message' => 'Successfully deleted categories and their pictures.']);
+    }
+
+    public function showLevel($level)
+    {
+        $categories = Category::where('level', $level)->with('children')->get();
+        return view('admin.store.level', compact('categories', 'level'));
     }
 }

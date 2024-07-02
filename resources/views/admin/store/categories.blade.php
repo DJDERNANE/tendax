@@ -1,14 +1,17 @@
 @extends('layouts.adminStorePanel')
 
 @section('title', 'Categories')
+
 @section('content')
 
     <div class="container my-5 pt-5">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
-                <h6><a href="{{ route('categories.all') }}" class="active me-2">Categories <span id="count1"></span></a> </h6>
-                <h6><a href="{{ route('subcategories.all') }}" class="me-2">SubCategories <span id="count2"></span></a> </h6>
-                <h6><a href="{{ route('subsubcategories.all') }}">SubSubCategories <span id="count2"></span></a> </h6>
+                <h6><a href="{{ route('categories.level', ['level' => 0]) }}" class="{{ $level == 0 ? 'bold' : '' }}">Level 0</a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 1]) }}" class="{{ $level == 1 ? 'bold' : '' }}">Level 1</a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 2]) }}" class="{{ $level == 2 ? 'bold' : '' }}">Level 2</a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 3]) }}" class="{{ $level == 3 ? 'bold' : '' }}">Level 3</a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 4]) }}" class="{{ $level == 4 ? 'bold' : '' }}">Level 4</a></h6>
             </div>
 
             <div>
@@ -40,6 +43,17 @@
                                     <div class="form-group">
                                         <label for="">Photo : </label>
                                         <input class="form-control" type="file" name="picture" required>
+                                    </div>
+                                    <div>
+                                        <label for="parent_id">Parent Category:</label>
+                                        <select id="parent_id" name="parent_id">
+                                            <option value="">No Parent</option>
+                                            @foreach ($cats as $category)
+                                                <option value="{{ $category->id }}" {{ old('parent_id') == $category->id ? 'selected' : '' }}>
+                                                    {{ str_repeat('—', $category->level) }} {{ $category->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div>
                                         <button type="submit" class="btn btn-primary">Enregistrer</button>

@@ -77,29 +77,16 @@
 
                         <div class="my-4 col-6">
                             <label for="cat">Categories</label>
-                            <select name="cat" id="cat" class="px-2 py-2 bg-light border-0 rounded my-2"> <br>
-                                @foreach ($cats as $item)
-                                    @if ($item->id = $product->category_id)
-                                        <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
-                                    @else
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endif
+                            <select name="cats[]" id="categories" multiple>
+                                @foreach ($cats as $category)
+                                    <option value="{{ $category->id }}"
+                                        {{ in_array($category->id, $selectedCategories) ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
                                 @endforeach
-                            </select>
+                            </select>   
                         </div>
-                        <div class="my-4 col-6">
-                            <label for="subcat">Sous Categories</label>
-                            <select name="subcat" id="subcat" class="px-2 py-2 bg-light border-0 rounded my-2"> <br>
 
-                                @foreach ($subcats as $item)
-                                    @if ($item->id = $product->sub_category_id)
-                                        <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
-                                    @else
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="my-4 col-12">
                             <label for="brand">Marque : </label>
                             <div class="row">
@@ -216,6 +203,21 @@
             .catch(error => {
                 console.error(error);
             });
+    </script>
+    <script>
+        new MultiSelectTag('categories', {
+            rounded: true, // default true
+            shadow: true, // default false
+            placeholder: 'Search', // default Search...
+            tagColor: {
+                textColor: '#327b2c',
+                borderColor: '#92e681',
+                bgColor: '#eaffe6',
+            },
+            onChange: function(values) {
+                console.log(values)
+            }
+        })
     </script>
 
 @endsection

@@ -122,7 +122,13 @@ table tr td img.icon{
    background-color: rgba(14, 52, 65,0.2);
    font-weight: 900;
 }
-.addproduct input, .addproduct select{
+.addproduct input[type="text"],
+.addproduct input[type="email"],
+.addproduct input[type="password"],
+.addproduct input[type="number"],
+.addproduct input[type="date"],
+.addproduct input[type="file"],
+.addproduct select {
     width: 100%;
 }
 .addproduct div textarea{

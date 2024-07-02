@@ -1,14 +1,17 @@
 
 
 <?php $__env->startSection('title', 'Categories'); ?>
+
 <?php $__env->startSection('content'); ?>
 
     <div class="container my-5 pt-5">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
-                <h6><a href="<?php echo e(route('categories.all')); ?>" class="active me-2">Categories <span id="count1"></span></a> </h6>
-                <h6><a href="<?php echo e(route('subcategories.all')); ?>" class="me-2">SubCategories <span id="count2"></span></a> </h6>
-                <h6><a href="<?php echo e(route('subsubcategories.all')); ?>">SubSubCategories <span id="count2"></span></a> </h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 0])); ?>" class="<?php echo e($level == 0 ? 'bold' : ''); ?>">Level 0</a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 1])); ?>" class="<?php echo e($level == 1 ? 'bold' : ''); ?>">Level 1</a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 2])); ?>" class="<?php echo e($level == 2 ? 'bold' : ''); ?>">Level 2</a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 3])); ?>" class="<?php echo e($level == 3 ? 'bold' : ''); ?>">Level 3</a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 4])); ?>" class="<?php echo e($level == 4 ? 'bold' : ''); ?>">Level 4</a></h6>
             </div>
 
             <div>
@@ -40,6 +43,18 @@
                                     <div class="form-group">
                                         <label for="">Photo : </label>
                                         <input class="form-control" type="file" name="picture" required>
+                                    </div>
+                                    <div>
+                                        <label for="parent_id">Parent Category:</label>
+                                        <select id="parent_id" name="parent_id">
+                                            <option value="">No Parent</option>
+                                            <?php $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($category->id); ?>" <?php echo e(old('parent_id') == $category->id ? 'selected' : ''); ?>>
+                                                    <?php echo e(str_repeat('—', $category->level)); ?> <?php echo e($category->name); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
                                     </div>
                                     <div>
                                         <button type="submit" class="btn btn-primary">Enregistrer</button>

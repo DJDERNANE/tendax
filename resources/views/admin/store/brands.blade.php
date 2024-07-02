@@ -66,6 +66,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Image</th>
+                <th scope="col">Edit</th>
               </tr>
             </thead>
             <tbody>
@@ -74,8 +75,15 @@
                 <td><input type="checkbox" name="item[]" ></td>
                 <th scope="row">{{$item->id}}</th>
                 <td>{{$item->name}}</td>
-                <td> <img class="col-3 shadow-sm bg-white" width="50" height="50" src="{{ asset('pictures/Brands/'.$item->picture) }}" alt="image"></td>
-              </tr>
+                <td> <img class="col-3 mx-auto shadow-sm bg-white" width="50" height="50" src="{{ asset('pictures/Brands/'.$item->picture) }}" alt="image"></td>
+                <td>
+                    <a href="{{route('admin.product.edit', $item->id)}}" target="_blanck">
+                        <button class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>    
+                    </a>    
+                </td>
+            </tr>
             @endforeach
              
             

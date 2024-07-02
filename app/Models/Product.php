@@ -14,8 +14,6 @@ class Product extends Model
         'picture',
         'price',
         'quantity',
-        'category_id',
-        'sub_category_id',
         'brand_id',
         'primary_desc',
         'full_desc',
@@ -31,10 +29,6 @@ class Product extends Model
         return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
 
-    public function subCategory()
-    {
-        return $this->belongsto(SubCategory::class);
-    }
 
     public function brand()
     {

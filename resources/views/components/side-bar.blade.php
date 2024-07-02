@@ -15,7 +15,7 @@
                 
                 <ul class="my-2 subcats" style="list-style-type: none">
                     <hr>
-                    @foreach ($item->subCategories as $subcat)
+                    @foreach ($item->children as $subcat)
                        <li>
                             <a href=""  style="color: black">{{ $subcat->name }}</a>
                        </li>

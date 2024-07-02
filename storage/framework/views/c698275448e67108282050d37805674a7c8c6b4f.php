@@ -15,7 +15,7 @@
                 
                 <ul class="my-2 subcats" style="list-style-type: none">
                     <hr>
-                    <?php $__currentLoopData = $item->subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $item->children; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                        <li>
                             <a href=""  style="color: black"><?php echo e($subcat->name); ?></a>
                        </li>

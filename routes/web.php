@@ -16,8 +16,6 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\SearchOffreController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SubCategoryController;
-use App\Http\Controllers\SubSubCategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\GroupParticipantController;
@@ -186,19 +184,20 @@ Route::group(['prefix' => 'admin',  'middleware' => 'adminpanel'], function()
 
     Route::group(['prefix'=>'store'], function () {
         Route::get('/', function () { return view('admin.store.dashboard');})->name('store.admin');
-        Route::get('/categories',[CategoryController::class, 'index'])->name('categories.all');
+        Route::get('/categories/level/{level}', [CategoryController::class, 'showLevel'])->name('categories.level');
+        Route::get('//categories/level/0',[CategoryController::class, 'showLevel'])->name('categories.all');
         Route::delete('/categories/delete',[CategoryController::class, 'destroy'])->name('categories.delete');
         Route::post('/categories/store',[CategoryController::class, 'store'])->name('categories.store');
     
-        //sub category
-        Route::get('/subcategories',[SubCategoryController::class, 'index'])->name('subcategories.all');
-        Route::post('/subcategories/store',[SubCategoryController::class, 'store'])->name('subcategories.store');
-        Route::delete('/subcategories/delete',[SubCategoryController::class, 'destroy'])->name('subcategories.delete');
+        // //sub category
+        // Route::get('/subcategories',[SubCategoryController::class, 'index'])->name('subcategories.all');
+        // Route::post('/subcategories/store',[SubCategoryController::class, 'store'])->name('subcategories.store');
+        // Route::delete('/subcategories/delete',[SubCategoryController::class, 'destroy'])->name('subcategories.delete');
 
-        //sub-sub category
-        Route::get('/subsubcategories',[SubSubCategoryController::class, 'index'])->name('subsubcategories.all');
-        Route::post('/subsubcategories/store',[SubSubCategoryController::class, 'store'])->name('subsubcategories.store');
-        Route::delete('/subsubcategories/delete',[SubSubCategoryController::class, 'destroy'])->name('subsubcategories.delete');
+        // //sub-sub category
+        // Route::get('/subsubcategories',[SubSubCategoryController::class, 'index'])->name('subsubcategories.all');
+        // Route::post('/subsubcategories/store',[SubSubCategoryController::class, 'store'])->name('subsubcategories.store');
+        // Route::delete('/subsubcategories/delete',[SubSubCategoryController::class, 'destroy'])->name('subsubcategories.delete');
     
         //brands
         Route::get('/brands',[BrandController::class, 'index'])->name('brands.all');

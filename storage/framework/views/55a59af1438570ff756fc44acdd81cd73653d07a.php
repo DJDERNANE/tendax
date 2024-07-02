@@ -69,29 +69,17 @@
 
                         <div class="my-4 col-6">
                             <label for="cat">Categories</label>
-                            <select name="cat" id="cat" class="px-2 py-2 bg-light border-0 rounded my-2"> <br>
-                                <?php $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <?php if($item->id = $product->category_id): ?>
-                                        <option value="<?php echo e($item->id); ?>" selected><?php echo e($item->name); ?></option>
-                                    <?php else: ?>
-                                        <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
-                                    <?php endif; ?>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
-                        </div>
-                        <div class="my-4 col-6">
-                            <label for="subcat">Sous Categories</label>
-                            <select name="subcat" id="subcat" class="px-2 py-2 bg-light border-0 rounded my-2"> <br>
+                            <select name="cats[]" id="categories" multiple>
+                                <?php $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($category->id); ?>"
+                                        <?php echo e(in_array($category->id, $selectedCategories) ? 'selected' : ''); ?>>
+                                        <?php echo e($category->name); ?>
 
-                                <?php $__currentLoopData = $subcats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <?php if($item->id = $product->sub_category_id): ?>
-                                        <option value="<?php echo e($item->id); ?>" selected><?php echo e($item->name); ?></option>
-                                    <?php else: ?>
-                                        <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
-                                    <?php endif; ?>
+                                    </option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
+
                         <div class="my-4 col-12">
                             <label for="brand">Marque : </label>
                             <div class="row">
@@ -183,8 +171,7 @@
             });
         });
     </script>
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('scripts'); ?>
+
     <script>
         ClassicEditor
             .create(document.querySelector('#desc'))
@@ -196,6 +183,21 @@
             .catch(error => {
                 console.error(error);
             });
+    </script>
+    <script>
+        new MultiSelectTag('categories', {
+            rounded: true, // default true
+            shadow: true, // default false
+            placeholder: 'Search', // default Search...
+            tagColor: {
+                textColor: '#327b2c',
+                borderColor: '#92e681',
+                bgColor: '#eaffe6',
+            },
+            onChange: function(values) {
+                console.log(values)
+            }
+        })
     </script>
 
 <?php $__env->stopSection(); ?>

@@ -21,8 +21,6 @@ class CreateProductsTable extends Migration
             $table->foreignId('store_id')->constrained()->onDelete('cascade');
             $table->integer('price');
             $table->integer('quantity');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('sub_category_id')->constrained()->onDelete('cascade');
             $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             $table->string('primary_desc');
             $table->string('full_desc');

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class StoreController extends Controller
 {
     public function index(){
-        $cats  = Category::all();
+        $cats  = Category::where('parent_id', null)->paginate(12);
         $products = Product::where('accepted', true)->get();
         $brands = Brand::all();
         $stores = Store::where('isActive', true)->get();
@@ -39,8 +39,15 @@ class StoreController extends Controller
         return view('store.marqueProducts', compact('products', 'brand'));
     }
     public function productDetails(Product $product){
-       $products = Product::where('category_id', $product->category->id)->get();
-        return view('store.productDetails', compact('product', 'products'));
+       // Fetch category IDs associated with the given product
+       $categoryIds = $product->categories->pluck('id');
+
+       // Fetch products that belong to any of these categories, excluding the current product
+       $products = Product::whereHas('categories', function ($query) use ($categoryIds) {
+           $query->whereIn('categories.id', $categoryIds);
+       })->where('id', '<>', $product->id)->get();
+
+       return view('store.productDetails', compact('product', 'products'));
     }
     public function createStore(){
         return view('createStore');

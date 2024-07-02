@@ -40,7 +40,7 @@
                                 </a>
 
                                 <p class="marque mb-1"><span style="font-size: 12px">Marque : </span>
-                                    <span class="category-name"><b><?php echo e($item->category->name); ?></b></span></p>
+                                    <span class="category-name"><b><?php echo e($item->brand->name); ?></b></span></p>
                                 <div class="d-md-flex d-none">
                                     <i class="bi bi-star-fill"></i>
                                     <i class="bi bi-star-fill"></i>

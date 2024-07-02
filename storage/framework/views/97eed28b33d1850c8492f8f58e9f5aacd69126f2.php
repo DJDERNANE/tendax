@@ -65,6 +65,8 @@
                     </a>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
+            <?php echo e($cats->links()); ?>
+
         </div>
     </div>
 
@@ -92,7 +94,7 @@
                                         <p class="font-weight-bold mb-1"><?php echo e($item->name); ?></p>
                                     </a>
 
-                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->category->name); ?></p>
+                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->brand->name); ?></p>
                                     <div>
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>
@@ -124,6 +126,7 @@
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </div>
+           
 
             <div class="swiper-button-next1 swiper-button-next">
                 <img src="<?php echo e(asset('img/right.png')); ?>" alt="">

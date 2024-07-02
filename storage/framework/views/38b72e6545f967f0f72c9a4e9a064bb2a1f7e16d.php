@@ -457,7 +457,7 @@
                                 <img class='mx-auto py-2' src="<?php echo e(asset('pictures/Products/'.$item->picture)); ?>"alt="Card image cap">
                                 <div class="p-2 desc">
                                     <p class="font-weight-bold mb-1"><?php echo e($item->name); ?></p>
-                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->category->name); ?></p>
+                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->brand->name); ?></p>
                                     <div>
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>

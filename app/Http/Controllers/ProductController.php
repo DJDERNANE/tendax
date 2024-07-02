@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\SubCategory;
 use App\Models\Brand;
 use App\Models\Store;
 use App\Models\User;
@@ -104,7 +103,6 @@ class ProductController extends Controller
     public function create()
     {
         $cats = Category::all();
-        $subcats = SubCategory::all();
         $brands = Brand::all();
         $user =  User::where('id',Auth::id())->get()->first();
       
@@ -112,7 +110,7 @@ class ProductController extends Controller
     
         
 
-        return view('store.panel.addProduct', compact(['brands','cats', 'subcats', 'stores']));
+        return view('store.panel.addProduct', compact(['brands','cats', 'stores']));
         //return $stores;
     }
 
@@ -120,13 +118,12 @@ class ProductController extends Controller
     public function adminCreate()
     {
         $cats = Category::all();
-        $subcats = SubCategory::all();
         $brands = Brand::all();
         $user =  User::where('id',Auth::id())->get()->first();
       
         $stores = Store::all();
      
-        return view('admin.store.addProduct', compact(['brands','cats', 'subcats', 'stores']));
+        return view('admin.store.addProduct', compact(['brands','cats', 'stores']));
         //return $stores;
     }
 
@@ -153,8 +150,6 @@ class ProductController extends Controller
                 'picture' => $imageName,
                 'price' => $request->price,
                 'quantity' => $request->qty,
-                'category_id' => $request->cat,
-                'sub_category_id' => $request->subcat,
                 'brand_id' => $request->brand,
                 'primary_desc' => $request->desc,
                 'full_desc' => $request->details,
@@ -191,10 +186,12 @@ class ProductController extends Controller
             }
 
             
-
+            $product->categories()->attach($request->cats);
+            
             return redirect()->route('products.all');
         }
-       return "error";
+
+       
     }
 
     /**
@@ -218,18 +215,18 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $cats = Category::all();
-        $subcats = SubCategory::all();
         $brands = Brand::all();
-        return view('store.panel.detailsProduct', compact('product','cats', 'subcats', 'brands'));
+        $selectedCategories = $product->categories->pluck('id')->toArray();
+        return view('store.panel.detailsProduct', compact('product','cats', 'brands','selectedCategories'));
     }
 
 
     public function adminEdit(Product $product)
     {
         $cats = Category::all();
-        $subcats = SubCategory::all();
         $brands = Brand::all();
-        return view('admin.store.productDetails', compact('product','cats', 'subcats', 'brands'));
+        $selectedCategories = $product->categories->pluck('id')->toArray();
+        return view('admin.store.productDetails', compact('product','cats', 'brands', 'selectedCategories'));
     }
 
     
@@ -279,8 +276,6 @@ class ProductController extends Controller
             'ref' => $request->ref,
             'price' => $request->price,
             'quantity' => $request->qty,
-            'category_id' => $request->cat,
-            'sub_category_id' => $request->subcat,
             'brand_id' => $request->brand,
             'primary_desc' => $request->desc,
             'full_desc' => $request->details,
@@ -290,6 +285,7 @@ class ProductController extends Controller
         ]);
         $product->save();
 
+        $product->categories()->sync($request->cats);
             
 
         return redirect()->route('products.all');
@@ -333,8 +329,6 @@ class ProductController extends Controller
             'ref' => $request->ref,
             'price' => $request->price,
             'quantity' => $request->qty,
-            'category_id' => $request->cat,
-            'sub_category_id' => $request->subcat,
             'brand_id' => $request->brand,
             'primary_desc' => $request->desc,
             'full_desc' => $request->details,
