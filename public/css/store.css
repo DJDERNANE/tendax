@@ -226,15 +226,15 @@
     }
 
     .card form {
-        height: max-content;
+        height:0px;
         overflow: hidden;
         bottom: 0;
         transition: all 0.6s;
     }
 
     .card:hover form {
-        max-height: 1000px;
-
+        height: max-content;
+        transition:  all 0.6s;
     }
 
     .card .btn {

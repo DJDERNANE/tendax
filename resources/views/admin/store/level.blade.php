@@ -106,6 +106,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Image</th>
+                    <th scope="col">Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,11 +114,18 @@
                     <tr>
                         <td><input type="checkbox" name="item[]" value="{{ $item->id }}"></td>
                         <th scope="row">{{ $item->id }}</th>
-                        <td><img class="col-3 shadow-sm bg-white"  class="icon"
+                        <td><img class="col-3 shadow-sm bg-white mx-auto"  class="icon"
                             src="{{ asset('pictures/Category/Icons' . $item->icon) }}" alt="image"> {{ $item->name }}</td>
-                        <td> <img class="col-3 shadow-sm bg-white"
+                        <td> <img class="col-3 shadow-sm bg-white mx-auto"
                                 src="{{ asset('pictures/Category/' . $item->picture) }}" alt="image"></td>
-                    </tr>
+                            <td>
+                                <a href="{{route('categories.edit', $item->id)}}" target="_blanck">
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>    
+                                </a>    
+                            </td>
+                            </tr>
                 @endforeach
 
 

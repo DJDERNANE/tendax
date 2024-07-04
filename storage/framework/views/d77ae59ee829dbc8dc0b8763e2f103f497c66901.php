@@ -107,6 +107,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Image</th>
+                    <th scope="col">Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -114,11 +115,18 @@
                     <tr>
                         <td><input type="checkbox" name="item[]" value="<?php echo e($item->id); ?>"></td>
                         <th scope="row"><?php echo e($item->id); ?></th>
-                        <td><img class="col-3 shadow-sm bg-white"  class="icon"
+                        <td><img class="col-3 shadow-sm bg-white mx-auto"  class="icon"
                             src="<?php echo e(asset('pictures/Category/Icons' . $item->icon)); ?>" alt="image"> <?php echo e($item->name); ?></td>
-                        <td> <img class="col-3 shadow-sm bg-white"
+                        <td> <img class="col-3 shadow-sm bg-white mx-auto"
                                 src="<?php echo e(asset('pictures/Category/' . $item->picture)); ?>" alt="image"></td>
-                    </tr>
+                            <td>
+                                <a href="<?php echo e(route('categories.edit', $item->id)); ?>" target="_blanck">
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>    
+                                </a>    
+                            </td>
+                            </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 

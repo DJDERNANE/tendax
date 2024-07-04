@@ -91,7 +91,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('admin.store.editCategory', compact('category')); 
     }
 
     /**
@@ -103,9 +103,63 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        // Validate the request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+    
+        try {
+            // Initialize the icon and picture names
+            $iconName = $category->icon;
+            $imageName = $category->picture;
+    
+            // Handle picture upload
+            if ($request->hasFile('picture')) {
+                // Delete the old picture if it exists
+                if ($category->picture) {
+                    Storage::disk('pictures')->delete('Category/' . $category->picture);
+                }
+    
+                $imageName = $request->file('picture')->getClientOriginalName();
+                $request->file('picture')->storeAs('Category', $imageName, 'pictures');
+            }
+    
+            // Handle icon upload
+            if ($request->hasFile('icon')) {
+                // Delete the old icon if it exists
+                if ($category->icon) {
+                    Storage::disk('pictures')->delete('Category/Icons/' . $category->icon);
+                }
+    
+                $iconName = $request->file('icon')->getClientOriginalName();
+                $request->file('icon')->storeAs('Category/Icons', $iconName, 'pictures');
+            }
+    
+            // Find the parent category
+            $parent = Category::find($request->parent_id);
+            $level = $parent ? $parent->level + 1 : 0;
+    
+            // Update the category
+            $category->update([
+                'icon' => $iconName,
+                'parent_id' => $request->parent_id,
+                'level' => $level,
+                'name' => $request->name,
+                'picture' => $imageName,
+            ]);
+    
+            return redirect()->route('categories.level', ['level' => $level])->with('success', 'Category updated successfully!');
+        } catch (\Throwable $th) {
+            // Log the error
+            \Log::error('Error updating category: ' . $th->getMessage());
+    
+            return redirect()->back()->with('error', 'An error occurred while updating the category. Please try again.');
+        }
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
