@@ -11,6 +11,7 @@ use App\Models\Photo;
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -117,13 +118,14 @@ class ProductController extends Controller
 
     public function adminCreate()
     {
-        $cats = Category::where('parent_id', null)->get();
+        $cats1 = Category::where('parent_id', null)->get();
+     
         $brands = Brand::all();
         $user =  User::where('id',Auth::id())->get()->first();
       
         $stores = Store::all();
      
-        return view('admin.store.addProduct', compact(['brands','cats', 'stores']));
+        return view('admin.store.addProduct', compact(['brands','cats1', 'stores']));
         //return $stores;
     }
 
@@ -134,65 +136,77 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        if ($request->hasFile('picture')) {
-            $user = User::find(Auth::id());
-            $accepted= false;
-            if ($user->type_user = "Super admin") {
-                $accepted = true;
+{
+    try {
+        
+        $user = Auth::user();
+        $accepted = $user->type_user == "Super admin";
+
+        $userstore = $user->store[0]->id;
+        $imageName = $request->file('picture')->getClientOriginalName();
+        $image = $request->file('picture')->storeAs('./Products', $imageName, 'pictures');
+
+        Log::info('Main image uploaded.', ['image_name' => $imageName]);
+
+        $product = Product::create([
+            'name' => $request->name,
+            'ref' => $request->ref,
+            'picture' => $imageName,
+            'price' => $request->price,
+            'quantity' => $request->qty,
+            'brand_id' => $request->brand,
+            'primary_desc' => $request->desc,
+            'full_desc' => $request->details,
+            'discount' => $request->discount,
+            'satrtOn' => $request->debut,
+            'endOn' => $request->fin,
+            'store_id' => $userstore,
+            'accepted' => $accepted
+        ]);
+
+        Log::info('Product created.', ['product_id' => $product->id]);
+
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $img) {
+                $imgName = $img->getClientOriginalName();
+                $img->storeAs('./Products/pictures/' . $imageName, $imgName, 'pictures');
+                Photo::create([
+                    'name' => $imgName,
+                    'path' => $imgName,
+                    'product_id' => $product->id
+                ]);
+
+                Log::info('Gallery image uploaded.', ['image_name' => $imgName]);
             }
-            $userstore = $user->store[0]->id;
-            $imageName = $request->file('picture')->getClientOriginalName();
-            $image = $request->file('picture')->storeAs('./Products',$imageName,'pictures');
-            $product = Product::create([
-                'name' => $request->name,
-                'ref' => $request->ref,
-                'picture' => $imageName,
-                'price' => $request->price,
-                'quantity' => $request->qty,
-                'brand_id' => $request->brand,
-                'primary_desc' => $request->desc,
-                'full_desc' => $request->details,
-                'discount' => $request->discount,
-                'satrtOn' => $request->debut,
-                'endOn' => $request->fin,
-                'store_id' => $userstore,
-                'accepted' => $accepted
-            ]);
-            if ($request->hasFile('gallery')) {
-                foreach ($request->file('gallery') as $img) {
-                    $imgName = $img->getClientOriginalName();
-                    $proimg = $img->storeAs('./Products/pictures/'.$imageName, $imgName,'pictures');
-                    Photo::create([
-                        'name'=> $imgName,
-                        'path'=> $imgName,
-                        'product_id' => $product->id
-                    ]);
-                }
-
-            }
-
-            if ($request->hasFile('files')) {
-                foreach ($request->file('files') as $img) {
-                    $imgName = $img->getClientOriginalName();
-                    $proimg = $img->storeAs('./Products/files/'.$imageName.'', $imgName,'pictures');
-                    Document::create([
-                        'name'=> $imgName,
-                        'path'=> $imgName,
-                        'product_id' => $product->id
-                    ]);
-                }
-
-            }
-
-            
-            $product->categories()->attach($request->cats);
-            
-            return redirect()->route('products.all');
         }
 
-       
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $fileName = $file->getClientOriginalName();
+                $file->storeAs('./Products/files/' . $imageName, $fileName, 'pictures');
+                Document::create([
+                    'name' => $fileName,
+                    'path' => $fileName,
+                    'product_id' => $product->id
+                ]);
+
+                Log::info('File uploaded.', ['file_name' => $fileName]);
+            }
+        }
+
+        // Attach categories to the product
+        $product->categories()->attach($request->cats);
+
+        Log::info('Categories attached to product.', ['product_id' => $product->id, 'categories' => $request->cats]);
+
+        return redirect()->route('products.all')->with('success', 'Product created successfully!');
+    } catch (\Exception $e) {
+        Log::error('Error in product creation.', ['error' => $e->getMessage()]);
+        return redirect()->back()->withErrors(['error' => 'There was an error creating the product. Please try again.']);
     }
+}
+
+    
 
     /**
      * Display the specified resource.

@@ -71,33 +71,35 @@
                                     name="fin">
                             </div>
                         </div>
-                        <div class="my-4 col-6">
+
+
+                        <div id="sub-categories-container-1" class="my-4 col-6">
                             <label for="cat">Categories Level 1</label>
-                            <select name="cats[]" id="categories" multiple>
-                                <?php $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <select name="cats[]" id="sub-cat-level-1" class="sub-cat" multiple>
+                                <?php $__currentLoopData = $cats1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
-
                         <div id="sub-categories-container-2" class="my-4 col-6">
                             <label for="sub-cat-level-2">Categories Level 2</label>
-                            <select name="cats[]" id="sub-cat-level-2" class="sub-cat-level" multiple>
-                                <option value="">Select Sub Category Level 2</option>
+                            <select name="cats[]" id="sub-cat-level-2" class="sub-cat" multiple>
+                               
                             </select>
                         </div>
                         <div id="sub-categories-container-3" class="my-4 col-6">
                             <label for="sub-cat-level-3">Categories Level 3</label>
-                            <select name="cats[]" id="sub-cat-level-3" class="sub-cat-level" multiple>
-                                <option value="">Select Sub Category Level 3</option>
+                            <select name="cats[]" id="sub-cat-level-3" class="sub-cat" multiple>
+                                
                             </select>
                         </div>
                         <div id="sub-categories-container-4" class="my-4 col-6">
                             <label for="sub-cat-level-4">Categories Level 4</label>
-                            <select name="cats[]" id="sub-cat-level-4" class="sub-cat-level" multiple>
-                                <option value="">Select Sub Category Level 4</option>
+                            <select name="cats[]" id="sub-cat-level-4" class="sub-cat" multiple>
+                                
                             </select>
                         </div>
+
 
 
                         <div class="my-4 col-12">
@@ -199,69 +201,51 @@
         });
     </script>
     <script>
-        // Assuming this is your main function or script context
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize MultiSelectTag for the root categories
-            new MultiSelectTag('categories', {
-                rounded: true,
-                shadow: true,
+        $(document).ready(function() {
+            // Initialize Select2 for all select elements
+            $('.sub-cat').select2({
                 placeholder: 'Search',
-                tagColor: {
-                    textColor: '#327b2c',
-                    borderColor: '#92e681',
-                    bgColor: '#eaffe6',
-                },
-                onChange: function(values) {
-                    loadSubCategories(values, 1);
+                theme: 'classic'
+            });
+
+            function loadChildren(parentId, level) {
+                // Find the next level
+                let nextLevel = level + 1;
+                if (nextLevel > 4) return;
+
+                // Select the next level element
+                let nextSelectElement = $(`#sub-cat-level-${nextLevel}`);
+                nextSelectElement.html(''); // Clear previous options
+
+                parentId.forEach(id => {
+                    $.ajax({
+                        type: 'GET',
+                        url: `/categories/children/${id}`,
+                        success: function(data) {
+                            $.each(data, function(index, category) {
+                                nextSelectElement.append('<option value="' + category.id + '">' + category.name + '</option>');
+                            });
+                        }
+                    });
+                });
+            }
+
+            // Attach change event handlers to each select element
+            $('.sub-cat').on('change', function(e) {
+                let selectedParentId = $(this).val();
+                let currentLevel = parseInt(this.id.split('-').pop());
+
+                // Clear all subsequent levels
+                for (let level = currentLevel + 1; level <= 4; level++) {
+                    $(`#sub-cat-level-${level}`).html('');
+                }
+
+                // Load children for the next level
+                if (selectedParentId.length > 0) {
+                    loadChildren(selectedParentId, currentLevel);
                 }
             });
-            let levels = [2, 3, 4]
-            levels.forEach(level => {
-
-                new MultiSelectTag(`sub-cat-level-${level}`, {
-                    rounded: true,
-                    shadow: true,
-                    placeholder: 'Search',
-                    tagColor: {
-                        textColor: '#327b2c',
-                        borderColor: '#92e681',
-                        bgColor: '#eaffe6',
-                    },
-                    // onChange: function(subValues) {
-                    //     loadSubCategories(subValues, nextLevel);
-                    // }
-                });
-            });
         });
-
-
-
-        function loadSubCategories(selectedOptions, level) {
-            selectedOptions.forEach(option => {
-                const parentId = option.value;
-
-                fetch(`/categories/children/${parentId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const nextLevel = level + 1;
-                        let selectElement = document.querySelector(`#sub-cat-level-${nextLevel}`);
-                        // Add fetched options
-                        console.log(selectElement)
-                        data.forEach(category => {
-                            const option = document.createElement('option');
-                            option.value = category.id;
-                            option.textContent = category.name;
-                            selectElement.appendChild(option);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching subcategories:', error));
-            });
-        }
     </script>
 <?php $__env->stopSection(); ?>
 
