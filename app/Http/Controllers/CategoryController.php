@@ -192,4 +192,10 @@ class CategoryController extends Controller
         $categories = Category::where('level', $level)->with('children')->get();
         return view('admin.store.level', compact('categories', 'level'));
     }
+
+    public function getChildCategories($parentId)
+    {
+        $childCategories = Category::where('parent_id', $parentId)->get();
+        return response()->json($childCategories);
+    }
 }

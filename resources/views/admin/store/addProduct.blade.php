@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="my-4 col-6">
-                            <label for="cat">Categories</label>
+                            <label for="cat">Categories Level 1</label>
                             <select name="cats[]" id="categories" multiple>
                                 @foreach ($cats as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -88,11 +88,32 @@
                             </select>
                         </div>
 
+                        <div id="sub-categories-container-2" class="my-4 col-6">
+                            <label for="sub-cat-level-2">Categories Level 2</label>
+                            <select name="cats[]" id="sub-cat-level-2" class="sub-cat-level" multiple>
+                                <option value="">Select Sub Category Level 2</option>
+                            </select>
+                        </div>
+                        <div id="sub-categories-container-3" class="my-4 col-6">
+                            <label for="sub-cat-level-3">Categories Level 3</label>
+                            <select name="cats[]" id="sub-cat-level-3" class="sub-cat-level" multiple>
+                                <option value="">Select Sub Category Level 3</option>
+                            </select>
+                        </div>
+                        <div id="sub-categories-container-4" class="my-4 col-6">
+                            <label for="sub-cat-level-4">Categories Level 4</label>
+                            <select name="cats[]" id="sub-cat-level-4" class="sub-cat-level" multiple>
+                                <option value="">Select Sub Category Level 4</option>
+                            </select>
+                        </div>
+
+
                         <div class="my-4 col-12">
                             <label for="brand">Marque : </label>
                             <div class="row">
                                 <div class="col-9">
-                                    <select name="brand" id="brand" class="px-2 py-2 bg-light border-0 rounded my-2">
+                                    <select name="brand" id="brand"
+                                        class="px-2 py-2 bg-light border-0 rounded my-2">
                                         <br>
                                         <option value="" selected>Selectionner</option>
                                         @foreach ($brands as $item)
@@ -199,18 +220,68 @@
         });
     </script>
     <script>
-        new MultiSelectTag('categories', {
-            rounded: true, // default true
-            shadow: true, // default false
-            placeholder: 'Search', // default Search...
-            tagColor: {
-                textColor: '#327b2c',
-                borderColor: '#92e681',
-                bgColor: '#eaffe6',
-            },
-            onChange: function(values) {
-                console.log(values)
-            }
-        })
+        // Assuming this is your main function or script context
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize MultiSelectTag for the root categories
+            new MultiSelectTag('categories', {
+                rounded: true,
+                shadow: true,
+                placeholder: 'Search',
+                tagColor: {
+                    textColor: '#327b2c',
+                    borderColor: '#92e681',
+                    bgColor: '#eaffe6',
+                },
+                onChange: function(values) {
+                    loadSubCategories(values, 1);
+                }
+            });
+            let levels = [2, 3, 4]
+            levels.forEach(level => {
+
+                new MultiSelectTag(`sub-cat-level-${level}`, {
+                    rounded: true,
+                    shadow: true,
+                    placeholder: 'Search',
+                    tagColor: {
+                        textColor: '#327b2c',
+                        borderColor: '#92e681',
+                        bgColor: '#eaffe6',
+                    },
+                    // onChange: function(subValues) {
+                    //     loadSubCategories(subValues, nextLevel);
+                    // }
+                });
+            });
+        });
+
+
+
+        function loadSubCategories(selectedOptions, level) {
+            selectedOptions.forEach(option => {
+                const parentId = option.value;
+
+                fetch(`/categories/children/${parentId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const nextLevel = level + 1;
+                        let selectElement = document.querySelector(`#sub-cat-level-${nextLevel}`);
+                        // Add fetched options
+                        console.log(selectElement)
+                        data.forEach(category => {
+                            const option = document.createElement('option');
+                            option.value = category.id;
+                            option.textContent = category.name;
+                            selectElement.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching subcategories:', error));
+            });
+        }
     </script>
 @endsection

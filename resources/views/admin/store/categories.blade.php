@@ -44,7 +44,7 @@
                                         <label for="">Photo : </label>
                                         <input class="form-control" type="file" name="picture" required>
                                     </div>
-                                    <div>
+                                    <div class="form-group">
                                         <label for="parent_id">Parent Category:</label>
                                         <select id="parent_id" name="parent_id">
                                             <option value="">No Parent</option>
@@ -59,8 +59,6 @@
                                         <button type="submit" class="btn btn-primary">Enregistrer</button>
                                     </div>
                                 </form>
-
-
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -68,27 +66,38 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
 
-        <div class="d-flex justify-content-between align-items-center my-4 p-2 bg-white rounded-3 shadow ">
+        <div class="d-flex justify-content-between align-items-center my-4 p-2 bg-white rounded-3 shadow">
             <div class="pl-5 py-1 pr-2 m-0 d-flex justify-content-between align-items-center store-navbar text-white">
                 <form class="d-flex bg-light store-form align-items-center p-2 rounded-3">
-
-
                     <input type="text" placeholder="search..." class="px-2 py-1 bg-transparent border-0 search">
                     <button class="px-2 border-0  bg-transparent"><i
                             class="bi bi-search text-primary text-black fs-5 "></i></button>
-
-
                 </form>
-
             </div>
-
-
+            <div class="filter-selects">
+                @if ($level > 0)
+                    <form action="{{ route('categories.level', ['level' => $level]) }}" method="get">
+                        <div class="form-group">
+                            <label for="parent_category">Parent Category:</label>
+                            <select id="parent_category" name="parent_category">
+                                <option value="">All</option>
+                                @foreach ($parentCategories as $cat)
+                                    <option value="{{ $cat->id }}" {{ request('parent_category') == $cat->id ? 'selected' : '' }}>
+                                        {{ $cat->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                        </div>
+                    </form>
+                @endif
+            </div>
         </div>
+
         <table class="table text-center ">
             <thead>
                 <tr>
@@ -103,87 +112,18 @@
                     <tr>
                         <td><input type="checkbox" name="item[]" value="{{ $item->id }}"></td>
                         <th scope="row">{{ $item->id }}</th>
-                        <td><img class="col-3 shadow-sm bg-white"  class="icon"
-                            src="{{ asset('pictures/Category/Icons' . $item->icon) }}" alt="image"> {{ $item->name }}</td>
-                        <td> <img class="col-3 shadow-sm bg-white"
-                                src="{{ asset('pictures/Category/' . $item->picture) }}" alt="image"></td>
+                        <td>
+                            <img class="col-3 shadow-sm bg-white icon"
+                                src="{{ asset('pictures/Category/Icons' . $item->icon) }}" alt="image">
+                            {{ $item->name }}
+                        </td>
+                        <td>
+                            <img class="col-3 shadow-sm bg-white"
+                                src="{{ asset('pictures/Category/' . $item->picture) }}" alt="image">
+                        </td>
                     </tr>
                 @endforeach
-
-
             </tbody>
         </table>
     </div>
-@endsection
-@section('scripts')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const selectAll = document.querySelector('#select-all');
-            const items = document.querySelectorAll('input[name="item[]"]');
-            const suppBtn = document.getElementById('supp-btn');
-           
-    
-            // Function to log and manage selected items
-            function logSelectedItems() {
-                const selectedItems = Array.from(items).filter(item => item.checked);
-                const count1 = document.getElementById('count1');
-                if (selectedItems.length == 0) {
-                    suppBtn.disabled = true;
-                    count1.innerHTML = ""; // Clear the text or set to default text if needed
-                } else {
-                    suppBtn.disabled = false;
-                    count1.innerHTML = "("+selectedItems.length+")"; // Set the actual number or use `selectedItems.length`
-                }
-            }
-
-    
-            // Initially call to set button state
-            logSelectedItems();
-    
-            // Event listener for 'select all' checkbox
-            selectAll.addEventListener('change', function() {
-                items.forEach(item => {
-                    item.checked = selectAll.checked;
-                });
-                logSelectedItems();
-            });
-    
-            // Event listeners for each checkbox
-            items.forEach(item => {
-                item.addEventListener('change', logSelectedItems);
-            });
-    
-            // Handle the delete button click event
-            $('.supp-btn').click(function(event) {
-                event.preventDefault();
-                if (confirm('Are you sure you want to delete this item?')) {
-                    // Recompute selectedValues just before the request
-                    const selectedValues = Array.from(items)
-                                               .filter(item => item.checked)
-                                               .map(item => item.value);
-                    $.ajax({
-                        url: '/admin/store/categories/delete',
-                        type: 'DELETE',
-                        data: JSON.stringify({
-                            ids: selectedValues,
-                            '_token': $('meta[name="csrf-token"]').attr('content')
-                        }),
-                        contentType: 'application/json',
-                        success: function(response) {
-                            console.log('res : ' + response);
-                            selectedValues.forEach(id => {
-                                $('input[value="' + id + '"]').closest('tr').remove();
-                            });
-                        },
-                        error: function(xhr) {
-                            console.log(xhr.responseText);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-    
 @endsection

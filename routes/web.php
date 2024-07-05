@@ -50,6 +50,8 @@ Route::get('/test', function () {
     return view('user.notif');
 });
 
+Route::get('/categories/children/{parentId}', [CategoryController::class, 'getChildCategories']);
+
 // Store 
 Route::get('/store',[StoreController::class, 'index'] )->name('store');
 Route::get('/store/marques',[StoreController::class, 'marques'] )->name('store.marques');
@@ -67,6 +69,9 @@ Route::post('/facteur/create',[FacteurProformaController::class, 'store'] )->nam
 Route::get('/documents', function () {
     return view('docs');
 })->name('docs');
+// Route::post('/admin/store/categories/store', function () {
+//     return "ok";
+// })->name('categories.store');
 
 Route::get('/conditions', function () {
     return view('conditions');
@@ -181,16 +186,17 @@ Route::group(['prefix' => 'admin',  'middleware' => 'adminpanel'], function()
     Route::get('/', function () { return view('admin.dashboard');})->name('dashboard');
 
     //Admin Store
-
-    Route::group(['prefix'=>'store'], function () {
+    //Route::post('/store/categories/store',[CategoryController::class, 'store'])->name('categories.store');
+    Route::group(['prefix' => 'store'], function() 
+    {
         Route::get('/', function () { return view('admin.store.dashboard');})->name('store.admin');
         Route::get('/categories/level/{level}', [CategoryController::class, 'showLevel'])->name('categories.level');
         Route::get('/categories/level/0',[CategoryController::class, 'showLevel'])->name('categories.all');
+        Route::post('/categories/store',[CategoryController::class, 'store'])->name('categories.store');
         Route::get('/categories/{category}',[CategoryController::class, 'edit'])->name('categories.edit');
         Route::post('/categories/{category}',[CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/delete',[CategoryController::class, 'destroy'])->name('categories.delete');
-        Route::post('/categories/store',[CategoryController::class, 'store'])->name('categories.store');
-    
+       
         // //sub category
         // Route::get('/subcategories',[SubCategoryController::class, 'index'])->name('subcategories.all');
         // Route::post('/subcategories/store',[SubCategoryController::class, 'store'])->name('subcategories.store');

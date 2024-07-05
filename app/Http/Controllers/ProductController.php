@@ -102,11 +102,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $cats = Category::all();
+        $cats = Category::where('parent_id', null)->get();
         $brands = Brand::all();
         $user =  User::where('id',Auth::id())->get()->first();
-      
-            $stores = $user->store;
+
+        $stores = $user->store;
     
         
 
@@ -117,7 +117,7 @@ class ProductController extends Controller
 
     public function adminCreate()
     {
-        $cats = Category::all();
+        $cats = Category::where('parent_id', null)->get();
         $brands = Brand::all();
         $user =  User::where('id',Auth::id())->get()->first();
       
