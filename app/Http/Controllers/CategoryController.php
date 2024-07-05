@@ -189,7 +189,7 @@ class CategoryController extends Controller
 
     public function showLevel($level)
     {
-        $categories = Category::where('level', $level)->with('children')->get();
+        $categories = Category::where('level', $level)->with('children')->paginate(10);
         return view('admin.store.level', compact('categories', 'level'));
     }
 
