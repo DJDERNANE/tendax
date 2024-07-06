@@ -101,17 +101,7 @@
             font-size: 15px
         }
 
-        form {
-            max-height: 0;
-            overflow: hidden;
-            bottom: 0;
-            transition: all 0.6s;
-        }
-
-        .card:hover form {
-            max-height: 1000px;
-
-        }
+      
 
         .desc {
             position: absolute;
@@ -199,8 +189,7 @@
                 <p class="primaryDesc" id="desc">
                     {!! $product->primary_desc !!}
                 </p>
-                <div class='row my-2 '>
-                    {{-- <form class='px-3 my-2'> --}}
+                <form class='row my-2 '>
                     <input type="hidden" value="{{ $item->id }}" name="product_id" readonly>
                     <div class='row my-2 pl-4 qteadd'>
                         Qte :
@@ -213,8 +202,7 @@
                         <button class="btn btn-primary col-12"><i class="bi bi-cart"></i> Ajouter au
                             panier</button>
                     </div>
-                    {{-- </form> --}}
-                </div>
+                </form>
                 <div class="row justify-content-between mt-5">
                     <div class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
                         <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>

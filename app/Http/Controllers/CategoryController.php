@@ -189,8 +189,25 @@ class CategoryController extends Controller
 
     public function showLevel($level)
     {
-        $categories = Category::where('level', $level)->with('children')->paginate(10);
-        return view('admin.store.level', compact('categories', 'level'));
+      
+        // Fetch categories for the specified level
+        $categories = Category::where('level', $level)->paginate(10);
+
+        // Fetch parent categories for the filter (only if level is greater than 1)
+        $parentCategories = $level > 0 ? Category::where('level', $level-1)->get() : [];
+
+        return view('admin.store.level', compact('categories', 'level', 'parentCategories'));
+    }
+    public function filterLevel(Request $request)
+    {
+        $level = $request->level;
+        // Fetch categories for the specified level
+        $categories = Category::where('parent_id', $request->parent_category)->paginate(10);
+
+        // Fetch parent categories for the filter (only if level is greater than 1)
+        $parentCategories = $level > 0 ? Category::where('level', $level-1)->get() : [];
+
+        return view('admin.store.level', compact('categories', 'level', 'parentCategories'));
     }
 
     public function getChildCategories($parentId)

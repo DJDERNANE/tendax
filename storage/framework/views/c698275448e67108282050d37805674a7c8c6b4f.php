@@ -1,4 +1,7 @@
 <div class="mt-4 sidebar-categories">
+    <div class="subcategories-side">
+        rgergerg
+    </div>
     <div class="categories-header p-2 d-flex align-items-center  font-weight-bold">
         <i class="bi bi-list mr-2 text-primary" style="font-size: 20px"></i>Categories
     </div>

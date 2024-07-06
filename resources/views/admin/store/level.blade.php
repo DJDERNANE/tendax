@@ -7,14 +7,19 @@
     <div class="container my-5 pt-5">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
-                <h6><a href="{{ route('categories.level', ['level' => 0]) }}" class="{{ $level == 0 ? 'bold' : '' }}">Level1 </a></h6> 
-                <h6><a href="{{ route('categories.level', ['level' => 1]) }}" class="{{ $level == 1 ? 'bold' : '' }}">Level2 </a></h6>
-                <h6><a href="{{ route('categories.level', ['level' => 2]) }}" class="{{ $level == 2 ? 'bold' : '' }}">Level3 </a></h6>
-                <h6><a href="{{ route('categories.level', ['level' => 3]) }}" class="{{ $level == 3 ? 'bold' : '' }}">Level4 </a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 0]) }}" class="{{ $level == 0 ? 'bold' : '' }}">Level1
+                    </a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 1]) }}" class="{{ $level == 1 ? 'bold' : '' }}">Level2
+                    </a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 2]) }}" class="{{ $level == 2 ? 'bold' : '' }}">Level3
+                    </a></h6>
+                <h6><a href="{{ route('categories.level', ['level' => 3]) }}" class="{{ $level == 3 ? 'bold' : '' }}">Level4
+                    </a></h6>
             </div>
 
             <div>
-                <button class="btn btn-danger rounded-3 supp-btn" id="supp-btn">X Supprimer <span id="count1"></span></button>
+                <button class="btn btn-danger rounded-3 supp-btn" id="supp-btn">X Supprimer <span
+                        id="count1"></span></button>
                 <button type="button" class="btn primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Ajouter
                 </button>
@@ -47,7 +52,7 @@
                                         <label for="parent_id">Parent Category:</label>
                                         <select id="parent_id" name="parent_id">
                                             <option value="">No Parent</option>
-                                            @foreach ($categories as $category)
+                                            @foreach ($parentCategories as $category)
                                                 <option value="{{ $category->id }}"
                                                     {{ old('parent_id') == $category->id ? 'selected' : '' }}>
                                                     {{ str_repeat('—', $category->level) }} {{ $category->name }}
@@ -80,14 +85,16 @@
             </div>
             <div class="filter-selects">
                 @if ($level > 0)
-                    <form action="{{ route('categories.level', ['level' => $level]) }}" method="get">
+                    <form action="{{ route('categories.filter', ['level' => $level]) }}" method="post">
+                        @csrf
                         <div class="form-group">
+                            <input type="hidden" name="level" value="{{ $level }}">
                             <label for="parent_category">Parent Category:</label>
                             <select id="parent_category" name="parent_category">
                                 <option value="">All</option>
-                                @foreach ($categories as $category)
+                                @foreach ($parentCategories as $category)
                                     <option value="{{ $category->id }}"
-                                        {{ request()->get('parent_category') == $category->id ? 'elected' : '' }}>
+                                        {{ old('parent_category') == $category->id ? 'selected' : '' }}>
                                         {{ str_repeat('—', $category->level) }} {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -123,9 +130,8 @@
                         </td>
                     </tr>
                 @endforeach
-               
+
             </tbody>
-            {{ $categories->links() }}
         </table>
 
     </div>
@@ -149,7 +155,8 @@
                 count1.innerHTML = ""; // Clear the text or set to default text if needed
             } else {
                 suppBtn.disabled = false;
-                count1.innerHTML = "("+selectedItems.length+")"; // Set the actual number or use `selectedItems.length`
+                count1.innerHTML = "(" + selectedItems.length +
+                ")"; // Set the actual number or use `selectedItems.length`
             }
         }
 
@@ -175,8 +182,8 @@
             if (confirm('Are you sure you want to delete this item?')) {
                 // Recompute selectedValues just before the request
                 const selectedValues = Array.from(items)
-                                          .filter(item => item.checked)
-                                          .map(item => item.value);
+                    .filter(item => item.checked)
+                    .map(item => item.value);
                 $.ajax({
                     url: '/admin/store/categories/delete',
                     type: 'DELETE',

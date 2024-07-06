@@ -7,14 +7,19 @@
     <div class="container my-5 pt-5">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
-                <h6><a href="<?php echo e(route('categories.level', ['level' => 0])); ?>" class="<?php echo e($level == 0 ? 'bold' : ''); ?>">Level1 </a></h6> 
-                <h6><a href="<?php echo e(route('categories.level', ['level' => 1])); ?>" class="<?php echo e($level == 1 ? 'bold' : ''); ?>">Level2 </a></h6>
-                <h6><a href="<?php echo e(route('categories.level', ['level' => 2])); ?>" class="<?php echo e($level == 2 ? 'bold' : ''); ?>">Level3 </a></h6>
-                <h6><a href="<?php echo e(route('categories.level', ['level' => 3])); ?>" class="<?php echo e($level == 3 ? 'bold' : ''); ?>">Level4 </a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 0])); ?>" class="<?php echo e($level == 0 ? 'bold' : ''); ?>">Level1
+                    </a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 1])); ?>" class="<?php echo e($level == 1 ? 'bold' : ''); ?>">Level2
+                    </a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 2])); ?>" class="<?php echo e($level == 2 ? 'bold' : ''); ?>">Level3
+                    </a></h6>
+                <h6><a href="<?php echo e(route('categories.level', ['level' => 3])); ?>" class="<?php echo e($level == 3 ? 'bold' : ''); ?>">Level4
+                    </a></h6>
             </div>
 
             <div>
-                <button class="btn btn-danger rounded-3 supp-btn" id="supp-btn">X Supprimer <span id="count1"></span></button>
+                <button class="btn btn-danger rounded-3 supp-btn" id="supp-btn">X Supprimer <span
+                        id="count1"></span></button>
                 <button type="button" class="btn primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Ajouter
                 </button>
@@ -47,7 +52,7 @@
                                         <label for="parent_id">Parent Category:</label>
                                         <select id="parent_id" name="parent_id">
                                             <option value="">No Parent</option>
-                                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php $__currentLoopData = $parentCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <option value="<?php echo e($category->id); ?>"
                                                     <?php echo e(old('parent_id') == $category->id ? 'selected' : ''); ?>>
                                                     <?php echo e(str_repeat('—', $category->level)); ?> <?php echo e($category->name); ?>
@@ -81,14 +86,16 @@
             </div>
             <div class="filter-selects">
                 <?php if($level > 0): ?>
-                    <form action="<?php echo e(route('categories.level', ['level' => $level])); ?>" method="get">
+                    <form action="<?php echo e(route('categories.filter', ['level' => $level])); ?>" method="post">
+                        <?php echo csrf_field(); ?>
                         <div class="form-group">
+                            <input type="hidden" name="level" value="<?php echo e($level); ?>">
                             <label for="parent_category">Parent Category:</label>
                             <select id="parent_category" name="parent_category">
                                 <option value="">All</option>
-                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $parentCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($category->id); ?>"
-                                        <?php echo e(request()->get('parent_category') == $category->id ? 'elected' : ''); ?>>
+                                        <?php echo e(old('parent_category') == $category->id ? 'selected' : ''); ?>>
                                         <?php echo e(str_repeat('—', $category->level)); ?> <?php echo e($category->name); ?>
 
                                     </option>
@@ -125,10 +132,8 @@
                         </td>
                     </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-               
-            </tbody>
-            <?php echo e($categories->links()); ?>
 
+            </tbody>
         </table>
 
     </div>
@@ -152,7 +157,8 @@
                 count1.innerHTML = ""; // Clear the text or set to default text if needed
             } else {
                 suppBtn.disabled = false;
-                count1.innerHTML = "("+selectedItems.length+")"; // Set the actual number or use `selectedItems.length`
+                count1.innerHTML = "(" + selectedItems.length +
+                ")"; // Set the actual number or use `selectedItems.length`
             }
         }
 
@@ -178,8 +184,8 @@
             if (confirm('Are you sure you want to delete this item?')) {
                 // Recompute selectedValues just before the request
                 const selectedValues = Array.from(items)
-                                          .filter(item => item.checked)
-                                          .map(item => item.value);
+                    .filter(item => item.checked)
+                    .map(item => item.value);
                 $.ajax({
                     url: '/admin/store/categories/delete',
                     type: 'DELETE',
@@ -204,4 +210,5 @@
         });
     });
 </script>
+
 <?php echo $__env->make('layouts.adminStorePanel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\tendaxe\resources\views/admin/store/level.blade.php ENDPATH**/ ?>

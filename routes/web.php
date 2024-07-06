@@ -191,6 +191,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'adminpanel'], function()
     {
         Route::get('/', function () { return view('admin.store.dashboard');})->name('store.admin');
         Route::get('/categories/level/{level}', [CategoryController::class, 'showLevel'])->name('categories.level');
+        Route::post('/categories/filter', [CategoryController::class, 'filterLevel'])->name('categories.filter');
         Route::get('/categories/level/0',[CategoryController::class, 'showLevel'])->name('categories.all');
         Route::post('/categories/store',[CategoryController::class, 'store'])->name('categories.store');
         Route::get('/categories/{category}',[CategoryController::class, 'edit'])->name('categories.edit');

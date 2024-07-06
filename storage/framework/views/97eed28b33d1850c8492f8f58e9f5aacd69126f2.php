@@ -31,7 +31,7 @@
 <?php unset($__componentOriginale47f40099c86fea5864fd2233ee8f4e20e104e1e); ?>
 <?php endif; ?>
         </div>
-        <div class="col-12 col-md-9 mt-4">
+        <div class="col-12 col-md-9 mt-4 content-side">
             <div class='row'>
                 <div class='col-12 col-md-9'>
                     <img style="width:100%" class="banner" src="<?php echo e(asset('img/banner.png')); ?>">

@@ -18,7 +18,7 @@
         <div class="col-0 col-md-3 ">
             <x-side-bar :categories="$cats" />
         </div>
-        <div class="col-12 col-md-9 mt-4">
+        <div class="col-12 col-md-9 mt-4 content-side">
             <div class='row'>
                 <div class='col-12 col-md-9'>
                     <img style="width:100%" class="banner" src="{{ asset('img/banner.png') }}">
