@@ -101,7 +101,7 @@
             font-size: 15px
         }
 
-      
+
 
         .desc {
             position: absolute;
@@ -119,23 +119,62 @@
     </style>
 @endsection
 @section('content')
-<div class="container">
-    <div class="mt-5 pt-md-5 container">
-        <div class="mt-md-5 row">
-            <div class="d-md-none flex-column d-flex p-2 col-12">
-                <p class="font-weight-bold pro-title">
-                    {{ $product->name }}
-                </p>
+    <div class="container">
+        <div class="mt-5 pt-md-5 container">
+            <div class="mt-md-5 row">
+                <div class="d-md-none flex-column d-flex p-2 col-12">
+                    <p class="font-weight-bold pro-title">
+                        {{ $product->name }}
+                    </p>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="flex-column d-flex">
-                        <p><span style="font-size: 13px"> La Marque : </span> <b>{{ $product->brand->name }}</b> </p>
-                        <p><span style="font-size: 13px">Reference : </span> <b>{{ $product->ref }}</b> </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="flex-column d-flex">
+                            <p><span style="font-size: 13px"> La Marque : </span> <b>{{ $product->brand->name ?? 'no brand' }}</b> </p>
+                            <p><span style="font-size: 13px">Reference : </span> <b>{{ $product->ref }}</b> </p>
+                        </div>
+                        <div class="flex-column d-flex">
+                            <img width="80" height="40"
+                            src="{{ $product->brand ? asset('pictures/Category/' . $product->brand->picture) : asset('images/default.jpg') }}" 
+                            alt="payment method">
+                            <div style="font-size: 10px">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                (24)
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="flex-column d-flex">
-                        <img width="80" height="40" src="{{ asset('pictures/Category/' . $product->brand->picture) }}"
-                            alt="payement methode">
-                        <div style="font-size: 10px">
+                </div>
+                <div class="col-12 col-md-4 ">
+                    <img src="{{ asset('pictures/Products/' . $product->picture) }}" alt="payement methode"
+                        class="text-center shadow-lg" id="main-image">
+                    <div class="gallery mt-3 justify-content-around g-2">
+                        <img onmouseover="changeImage(this)" class="shadow-sm bg-white"
+                            src="{{ asset('pictures/Products/' . $product->picture) }}" alt="payement methode" />
+                        @foreach ($product->pictures as $item)
+                            <img class="shadow-sm bg-white" onmouseover="changeImage(this)"
+                                src="{{ asset('pictures/Products/pictures/' . $product->picture . '/' . $item->path) }}"
+                                alt="payement methode">
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-12 col-md-8 ">
+                    <div class="d-md-flex flex-column d-none">
+                        <p class="font-weight-bold pro-title">
+                            {{ $product->name }}
+                        </p>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p><span> La Marque : </span> {{ $product->brand->name ?? 'no brand' }}</p>
+                            <img width="200" height="100"
+                                src="{{ $product->brand ?  asset('pictures/Category/' . $product->brand->picture ) : '' }}" alt="payement methode">
+
+                        </div>
+                        <p><span>Reference : </span> {{ $product->ref }}</p>
+                        <div>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
@@ -145,129 +184,90 @@
                         </div>
                     </div>
 
-                </div>
-            </div>
-            <div class="col-12 col-md-4 ">
-                <img src="{{ asset('pictures/Products/' . $product->picture) }}" alt="payement methode"
-                    class="text-center shadow-lg" id="main-image">
-                <div class="gallery mt-3 justify-content-around g-2">
-                    <img onmouseover="changeImage(this)" class="shadow-sm bg-white"
-                        src="{{ asset('pictures/Products/' . $product->picture) }}" alt="payement methode"  />
-                    @foreach ($product->pictures as $item)
-                        <img class="shadow-sm bg-white" onmouseover="changeImage(this)"
-                            src="{{ asset('pictures/Products/pictures/' . $product->picture . '/' . $item->path) }}"
-                            alt="payement methode">
-                    @endforeach
-                </div>
-            </div>
-            <div class="col-12 col-md-8 ">
-                <div class="d-md-flex flex-column d-none">
-                    <p class="font-weight-bold pro-title">
-                        {{ $product->name }}
+                    <p class="font-weight-bold price mt-4">
+                        {{ $product->price }} DA
                     </p>
+                    <p class="primaryDesc" id="desc">
+                        {!! $product->primary_desc !!}
+                    </p>
+                    <form class='row my-2 '>
+                        <input type="hidden" value="{{ $product->id }}" name="product_id" readonly>
+                        <div class='row my-2 pl-4 qteadd'>
+                            Qte :
+                            <button class='col-2 text-center' onclick="minQty(event)">-</button>
+                            <input class='col-4 text-center' id="qty" min="1" max="{{ $product->quantity }}"
+                                value="1" name='qte' type="number" name="qte" />
+                            <button class='col-2 text-center' onclick="addQty(event)">+</button>
+                        </div>
+                        <div class='row'>
+                            <button class="btn btn-primary col-12"><i class="bi bi-cart"></i> Ajouter au
+                                panier</button>
+                        </div>
+                    </form>
+                    <div class="row justify-content-between mt-5">
+                        <div
+                            class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
+                            <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
+                            <div>
+                                <p class="font-weight-bold text-md-center mb-0">Livraison au choix</p>
+                                <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Domicile, Point
+                                    relais, Retrait
+                                    au Dépöt
+                                </p>
+                            </div>
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p><span> La Marque : </span> {{ $product->brand->name }}</p>
-                        <img width="200" height="100"
-                            src="{{ asset('pictures/Category/' . $product->brand->picture) }}" alt="payement methode">
-                       
-                    </div>
-                    <p><span>Reference : </span> {{ $product->ref }}</p>
-                    <div>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        (24)
-                    </div>
-                </div>
+                        </div>
+                        <div
+                            class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
+                            <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
+                            <div>
+                                <p class="font-weight-bold text-md-center mb-0">Paiement sécurisé</p>
+                                <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Paiement par cheque
+                                    ou à
+                                    livraison, virement bancaire
+                                </p>
+                            </div>
 
-                <p class="font-weight-bold price mt-4">
-                    {{ $product->price }} DA
-                </p>
-                <p class="primaryDesc" id="desc">
-                    {!! $product->primary_desc !!}
-                </p>
-                <form class='row my-2 '>
-                    <input type="hidden" value="{{ $item->id }}" name="product_id" readonly>
-                    <div class='row my-2 pl-4 qteadd'>
-                        Qte :
-                        <button class='col-2 text-center' onclick="minQty(event)">-</button>
-                        <input class='col-4 text-center' id="qty" min="1" max="{{ $item->quantity }}"
-                            value="1" name='qte' type="number" name="qte" />
-                        <button class='col-2 text-center' onclick="addQty(event)">+</button>
-                    </div>
-                    <div class='row'>
-                        <button class="btn btn-primary col-12"><i class="bi bi-cart"></i> Ajouter au
-                            panier</button>
-                    </div>
-                </form>
-                <div class="row justify-content-between mt-5">
-                    <div class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
-                        <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
-                        <div>
-                            <p class="font-weight-bold text-md-center mb-0">Livraison au choix</p>
-                            <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Domicile, Point relais, Retrait
-                                au Dépöt
-                            </p>
                         </div>
-                        
-                    </div>
-                    <div class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
-                        <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
-                        <div>
-                            <p class="font-weight-bold text-md-center mb-0">Paiement sécurisé</p>
-                            <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Paiement par cheque ou à
-                                livraison, virement bancaire
-                            </p>
+                        <div
+                            class="item  col-md-3 col-12 text-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
+                            <i class="bi bi-truck text-primary font-weight-bold  mr-4"></i>
+                            <div>
+                                <p class="font-weight-bold text-md-center mb-0">SUPPORT EN LIGNE 24/7</p>
+                                <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">En une ou plusieurs
+                                    fois
+                                </p>
+                            </div>
+
                         </div>
-                       
-                    </div>
-                    <div class="item  col-md-3 col-12 text-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
-                        <i class="bi bi-truck text-primary font-weight-bold  mr-4"></i>
-                        <div>
-                            <p class="font-weight-bold text-md-center mb-0">SUPPORT EN LIGNE 24/7</p>
-                            <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">En une ou plusieurs fois
-                            </p>
-                        </div>
-                       
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class='populair-products px-5'>
-        <div class='title d-flex f justify-content-center align-items-center'>
-            <span></span>
-            <p class='title font-weight-bold text-center m-4'>Documents_et_notices</p>
-            <span></span>
-        </div>
-        <div class="d-flex justify-content-around">
-            <div class="text-center">
-                <p class="font-weight-bold text-primary">
-                    Disjoncteur DNX å Vis - Fiche
-                </p>
-                <button class="btn doc"> Voir le document</button>
+        <div class='populair-products px-5'>
+            <div class='title d-flex f justify-content-center align-items-center'>
+                <span></span>
+                <p class='title font-weight-bold text-center m-4'>Documents_et_notices</p>
+                <span></span>
             </div>
-            <div class="text-center">
-                <p class="font-weight-bold text-primary">
-                    Disjoncteur DNX å Vis - Fiche
-                </p>
-                <button class="btn doc"> Voir le document</button>
-            </div>
-            <div class="text-center">
-                <p class="font-weight-bold text-primary">
-                    Disjoncteur DNX å Vis - Fiche
-                </p>
-                <button class="btn doc"> Voir le document</button>
-            </div>
+            <div class="d-flex justify-content-around">
+                @foreach ($product->docs as $doc)
+                    <div class="text-center">
+                        <p class="font-weight-bold text-primary">
+                           {{ $doc->name }}</p>
+                        </p>
+                        <a href="{{ asset('pictures/Products/files/' . $doc->path) }}" target="_blank">
+                            <button class="btn doc"> Voir le document</button>
+                        </a>
+                      
+                    </div>
+                @endforeach
 
+            </div>
         </div>
     </div>
-</div>
-    
-   
+
+
 
     {{-- <div class='populair-products px-5'>
         <div class='title d-flex f justify-content-center align-items-center'>
@@ -374,7 +374,7 @@
                                         <p class="font-weight-bold mb-1">{{ $item->name }}</p>
                                     </a>
 
-                                    <p class="marque mb-1"><span>Marque </span>{{ $item->category->name }}</p>
+                                    <p class="marque mb-1"><span>Marque </span>{{ $item->category->name ?? 'no category' }}</p>
                                     <div>
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>

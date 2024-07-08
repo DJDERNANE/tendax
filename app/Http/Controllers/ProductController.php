@@ -143,10 +143,11 @@ class ProductController extends Controller
         $accepted = $user->type_user == "Super admin";
 
         $userstore = $user->store[0]->id;
-        $imageName = $request->file('picture')->getClientOriginalName();
-        $image = $request->file('picture')->storeAs('./Products', $imageName, 'pictures');
-
-        Log::info('Main image uploaded.', ['image_name' => $imageName]);
+        $imageName = '';
+        if ($request->hasFile('picture')) {
+            $imageName = $request->file('picture')->getClientOriginalName();
+            $image = $request->file('picture')->storeAs('./Products', $imageName, 'pictures');
+        }
 
         $product = Product::create([
             'name' => $request->name,
@@ -199,10 +200,10 @@ class ProductController extends Controller
 
         Log::info('Categories attached to product.', ['product_id' => $product->id, 'categories' => $request->cats]);
 
-        return redirect()->route('products.all')->with('success', 'Product created successfully!');
+        return back()->with('success', 'produit ajouter');
     } catch (\Exception $e) {
         Log::error('Error in product creation.', ['error' => $e->getMessage()]);
-        return redirect()->back()->withErrors(['error' => 'There was an error creating the product. Please try again.']);
+        return back()->with('error', 'etab not inserted');
     }
 }
 

@@ -4,6 +4,24 @@
 <?php $__env->startSection('content'); ?>
     <div class="bg-white rounded-3 container my-5  p-4 ">
         <h3>Ajouter Produit</h3>
+        <?php if(session('error')): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo e(session('error')); ?>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
+        <?php if(session('success')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="alert-message">
+                    <?php echo e(session('success')); ?>
+
+                </div>
+            </div>
+        <?php endif; ?>
         <form action="<?php echo e(route('admin.products.store')); ?>" method="post" enctype="multipart/form-data"
             class="fs-5 my-4 addproduct">
             <?php echo csrf_field(); ?>
@@ -13,12 +31,14 @@
                         <div class="my-4 col-6">
                             <label for="name" class="my-2">Nom de produit:</label> <br>
                             <input type="text" class="px-2 py-1 bg-light border-0 rounded my-2" id="name"
-                                name="name">
+                                name="name" required>
                         </div>
-                        <div class="my-4 col-6  ">
+                        <div class="my-4 col-6">
                             <label for="ref" class="my-2">Reference:</label> <br>
                             <input type="text" class="px-2 py-1 bg-light border-0 rounded my-2" id="ref"
                                 name="ref">
+                            <button type="button" class="btn btn-primary btn-sm mt-2" id="generateRef">Generate
+                                Reference</button>
                         </div>
 
                         <div class="my-4 col-7">
@@ -75,7 +95,7 @@
 
                         <div id="sub-categories-container-1" class="my-4 col-6">
                             <label for="cat">Categories Level 1</label>
-                            <select name="cats[]" id="sub-cat-level-1" class="sub-cat" multiple>
+                            <select name="cats[]" id="sub-cat-level-1" class="sub-cat" multiple required>
                                 <?php $__currentLoopData = $cats1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -84,19 +104,19 @@
                         <div id="sub-categories-container-2" class="my-4 col-6">
                             <label for="sub-cat-level-2">Categories Level 2</label>
                             <select name="cats[]" id="sub-cat-level-2" class="sub-cat" multiple>
-                               
+
                             </select>
                         </div>
                         <div id="sub-categories-container-3" class="my-4 col-6">
                             <label for="sub-cat-level-3">Categories Level 3</label>
                             <select name="cats[]" id="sub-cat-level-3" class="sub-cat" multiple>
-                                
+
                             </select>
                         </div>
                         <div id="sub-categories-container-4" class="my-4 col-6">
                             <label for="sub-cat-level-4">Categories Level 4</label>
                             <select name="cats[]" id="sub-cat-level-4" class="sub-cat" multiple>
-                                
+
                             </select>
                         </div>
 
@@ -223,7 +243,8 @@
                         url: `/categories/children/${id}`,
                         success: function(data) {
                             $.each(data, function(index, category) {
-                                nextSelectElement.append('<option value="' + category.id + '">' + category.name + '</option>');
+                                nextSelectElement.append('<option value="' + category
+                                    .id + '">' + category.name + '</option>');
                             });
                         }
                     });
@@ -245,6 +266,30 @@
                     loadChildren(selectedParentId, currentLevel);
                 }
             });
+        });
+    </script>
+
+    <script>
+        // Function to generate a random alphanumeric reference
+        function generateRandomReference(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        // Event listener when clicking "Generate Reference" button
+        document.getElementById('generateRef').addEventListener('click', function() {
+            const referenceField = document.getElementById('ref');
+            referenceField.value = generateRandomReference(8); // Change the length as needed
+        });
+
+        // Optional: Automatically generate reference on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const referenceField = document.getElementById('ref');
+            referenceField.value = generateRandomReference(8); // Change the length as needed
         });
     </script>
 <?php $__env->stopSection(); ?>

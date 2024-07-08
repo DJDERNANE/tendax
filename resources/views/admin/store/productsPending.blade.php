@@ -75,8 +75,8 @@
               <tr>
                 <th scope="row">{{$item->store->storeName}}</th>
                 <td> <img class="col-3 shadow-sm bg-white" width="40" height="40" src="{{ asset('pictures/Products/'.$item->picture) }}" alt="payement methode">{{$item->name}}</td>
-                <td>{{$item->brand->name}}</td>
-                <td>{{$item->store->user->phone}}</td>
+                <td>{{$item->brand->name ?? 'NO Marque'}}</td>
+                <td>{{$item->store->user->phone ?? 'no store'}}</td>
                 <td>
                     <a href="{{route('admin.product.edit', $item->id)}}">
                         <button class="btn btn-primary">

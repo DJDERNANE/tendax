@@ -77,7 +77,7 @@
 
                                     </option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
+                            </select>   
                         </div>
 
                         <div class="my-4 col-12">

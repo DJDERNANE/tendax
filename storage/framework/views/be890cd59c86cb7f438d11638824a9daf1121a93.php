@@ -75,7 +75,7 @@
               <tr>
                 <th scope="row"><?php echo e($item->store->storeName); ?></th>
                 <td> <img class="col-3 shadow-sm bg-white" width="40" height="40" src="<?php echo e(asset('pictures/Products/'.$item->picture)); ?>" alt="payement methode"><?php echo e($item->name); ?></td>
-                <td><?php echo e($item->brand->name); ?></td>
+                <td><?php echo e($item->brand->name ?? 'NO BRAND'); ?></td>
                 <td><?php echo e($item->store->user->phone); ?></td>
                 <td>
                     <a href="<?php echo e(route('admin.product.edit', $item->id)); ?>">

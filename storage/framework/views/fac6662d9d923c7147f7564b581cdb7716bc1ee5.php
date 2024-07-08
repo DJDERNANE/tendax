@@ -101,7 +101,7 @@
             font-size: 15px
         }
 
-      
+
 
         .desc {
             position: absolute;
@@ -119,24 +119,64 @@
     </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
-<div class="container">
-    <div class="mt-5 pt-md-5 container">
-        <div class="mt-md-5 row">
-            <div class="d-md-none flex-column d-flex p-2 col-12">
-                <p class="font-weight-bold pro-title">
-                    <?php echo e($product->name); ?>
+    <div class="container">
+        <div class="mt-5 pt-md-5 container">
+            <div class="mt-md-5 row">
+                <div class="d-md-none flex-column d-flex p-2 col-12">
+                    <p class="font-weight-bold pro-title">
+                        <?php echo e($product->name); ?>
 
-                </p>
+                    </p>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="flex-column d-flex">
-                        <p><span style="font-size: 13px"> La Marque : </span> <b><?php echo e($product->brand->name); ?></b> </p>
-                        <p><span style="font-size: 13px">Reference : </span> <b><?php echo e($product->ref); ?></b> </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="flex-column d-flex">
+                            <p><span style="font-size: 13px"> La Marque : </span> <b><?php echo e($product->brand->name ?? 'no brand'); ?></b> </p>
+                            <p><span style="font-size: 13px">Reference : </span> <b><?php echo e($product->ref); ?></b> </p>
+                        </div>
+                        <div class="flex-column d-flex">
+                            <img width="80" height="40"
+                            src="<?php echo e($product->brand ? asset('pictures/Category/' . $product->brand->picture) : asset('images/default.jpg')); ?>" 
+                            alt="payment method">
+                            <div style="font-size: 10px">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                (24)
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="flex-column d-flex">
-                        <img width="80" height="40" src="<?php echo e(asset('pictures/Category/' . $product->brand->picture)); ?>"
-                            alt="payement methode">
-                        <div style="font-size: 10px">
+                </div>
+                <div class="col-12 col-md-4 ">
+                    <img src="<?php echo e(asset('pictures/Products/' . $product->picture)); ?>" alt="payement methode"
+                        class="text-center shadow-lg" id="main-image">
+                    <div class="gallery mt-3 justify-content-around g-2">
+                        <img onmouseover="changeImage(this)" class="shadow-sm bg-white"
+                            src="<?php echo e(asset('pictures/Products/' . $product->picture)); ?>" alt="payement methode" />
+                        <?php $__currentLoopData = $product->pictures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <img class="shadow-sm bg-white" onmouseover="changeImage(this)"
+                                src="<?php echo e(asset('pictures/Products/pictures/' . $product->picture . '/' . $item->path)); ?>"
+                                alt="payement methode">
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-8 ">
+                    <div class="d-md-flex flex-column d-none">
+                        <p class="font-weight-bold pro-title">
+                            <?php echo e($product->name); ?>
+
+                        </p>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p><span> La Marque : </span> <?php echo e($product->brand->name ?? 'no brand'); ?></p>
+                            <img width="200" height="100"
+                                src="<?php echo e($product->brand ?  asset('pictures/Category/' . $product->brand->picture ) : ''); ?>" alt="payement methode">
+
+                        </div>
+                        <p><span>Reference : </span> <?php echo e($product->ref); ?></p>
+                        <div>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
@@ -146,131 +186,91 @@
                         </div>
                     </div>
 
-                </div>
-            </div>
-            <div class="col-12 col-md-4 ">
-                <img src="<?php echo e(asset('pictures/Products/' . $product->picture)); ?>" alt="payement methode"
-                    class="text-center shadow-lg" id="main-image">
-                <div class="gallery mt-3 justify-content-around g-2">
-                    <img onmouseover="changeImage(this)" class="shadow-sm bg-white"
-                        src="<?php echo e(asset('pictures/Products/' . $product->picture)); ?>" alt="payement methode"  />
-                    <?php $__currentLoopData = $product->pictures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <img class="shadow-sm bg-white" onmouseover="changeImage(this)"
-                            src="<?php echo e(asset('pictures/Products/pictures/' . $product->picture . '/' . $item->path)); ?>"
-                            alt="payement methode">
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>
-            </div>
-            <div class="col-12 col-md-8 ">
-                <div class="d-md-flex flex-column d-none">
-                    <p class="font-weight-bold pro-title">
-                        <?php echo e($product->name); ?>
+                    <p class="font-weight-bold price mt-4">
+                        <?php echo e($product->price); ?> DA
+                    </p>
+                    <p class="primaryDesc" id="desc">
+                        <?php echo $product->primary_desc; ?>
 
                     </p>
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p><span> La Marque : </span> <?php echo e($product->brand->name); ?></p>
-                        <img width="200" height="100"
-                            src="<?php echo e(asset('pictures/Category/' . $product->brand->picture)); ?>" alt="payement methode">
-                       
-                    </div>
-                    <p><span>Reference : </span> <?php echo e($product->ref); ?></p>
-                    <div>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        (24)
-                    </div>
-                </div>
-
-                <p class="font-weight-bold price mt-4">
-                    <?php echo e($product->price); ?> DA
-                </p>
-                <p class="primaryDesc" id="desc">
-                    <?php echo $product->primary_desc; ?>
-
-                </p>
-                <form class='row my-2 '>
-                    <input type="hidden" value="<?php echo e($item->id); ?>" name="product_id" readonly>
-                    <div class='row my-2 pl-4 qteadd'>
-                        Qte :
-                        <button class='col-2 text-center' onclick="minQty(event)">-</button>
-                        <input class='col-4 text-center' id="qty" min="1" max="<?php echo e($item->quantity); ?>"
-                            value="1" name='qte' type="number" name="qte" />
-                        <button class='col-2 text-center' onclick="addQty(event)">+</button>
-                    </div>
-                    <div class='row'>
-                        <button class="btn btn-primary col-12"><i class="bi bi-cart"></i> Ajouter au
-                            panier</button>
-                    </div>
-                </form>
-                <div class="row justify-content-between mt-5">
-                    <div class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
-                        <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
-                        <div>
-                            <p class="font-weight-bold text-md-center mb-0">Livraison au choix</p>
-                            <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Domicile, Point relais, Retrait
-                                au Dépöt
-                            </p>
+                    <form class='row my-2 '>
+                        <input type="hidden" value="<?php echo e($product->id); ?>" name="product_id" readonly>
+                        <div class='row my-2 pl-4 qteadd'>
+                            Qte :
+                            <button class='col-2 text-center' onclick="minQty(event)">-</button>
+                            <input class='col-4 text-center' id="qty" min="1" max="<?php echo e($product->quantity); ?>"
+                                value="1" name='qte' type="number" name="qte" />
+                            <button class='col-2 text-center' onclick="addQty(event)">+</button>
                         </div>
-                        
-                    </div>
-                    <div class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
-                        <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
-                        <div>
-                            <p class="font-weight-bold text-md-center mb-0">Paiement sécurisé</p>
-                            <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Paiement par cheque ou à
-                                livraison, virement bancaire
-                            </p>
+                        <div class='row'>
+                            <button class="btn btn-primary col-12"><i class="bi bi-cart"></i> Ajouter au
+                                panier</button>
                         </div>
-                       
-                    </div>
-                    <div class="item  col-md-3 col-12 text-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
-                        <i class="bi bi-truck text-primary font-weight-bold  mr-4"></i>
-                        <div>
-                            <p class="font-weight-bold text-md-center mb-0">SUPPORT EN LIGNE 24/7</p>
-                            <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">En une ou plusieurs fois
-                            </p>
+                    </form>
+                    <div class="row justify-content-between mt-5">
+                        <div
+                            class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
+                            <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
+                            <div>
+                                <p class="font-weight-bold text-md-center mb-0">Livraison au choix</p>
+                                <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Domicile, Point
+                                    relais, Retrait
+                                    au Dépöt
+                                </p>
+                            </div>
+
                         </div>
-                       
+                        <div
+                            class="item  col-md-3 col-12 text-md-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
+                            <i class="bi bi-truck text-primary font-weight-bold mr-4"></i>
+                            <div>
+                                <p class="font-weight-bold text-md-center mb-0">Paiement sécurisé</p>
+                                <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">Paiement par cheque
+                                    ou à
+                                    livraison, virement bancaire
+                                </p>
+                            </div>
+
+                        </div>
+                        <div
+                            class="item  col-md-3 col-12 text-center p-2 rounded shadow-sm d-flex flex-md-column align-items-center p-3 my-3">
+                            <i class="bi bi-truck text-primary font-weight-bold  mr-4"></i>
+                            <div>
+                                <p class="font-weight-bold text-md-center mb-0">SUPPORT EN LIGNE 24/7</p>
+                                <p class="text-black-50 font-weight-normal mb-0" style="font-size: 12px">En une ou plusieurs
+                                    fois
+                                </p>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class='populair-products px-5'>
-        <div class='title d-flex f justify-content-center align-items-center'>
-            <span></span>
-            <p class='title font-weight-bold text-center m-4'>Documents_et_notices</p>
-            <span></span>
-        </div>
-        <div class="d-flex justify-content-around">
-            <div class="text-center">
-                <p class="font-weight-bold text-primary">
-                    Disjoncteur DNX å Vis - Fiche
-                </p>
-                <button class="btn doc"> Voir le document</button>
+        <div class='populair-products px-5'>
+            <div class='title d-flex f justify-content-center align-items-center'>
+                <span></span>
+                <p class='title font-weight-bold text-center m-4'>Documents_et_notices</p>
+                <span></span>
             </div>
-            <div class="text-center">
-                <p class="font-weight-bold text-primary">
-                    Disjoncteur DNX å Vis - Fiche
-                </p>
-                <button class="btn doc"> Voir le document</button>
-            </div>
-            <div class="text-center">
-                <p class="font-weight-bold text-primary">
-                    Disjoncteur DNX å Vis - Fiche
-                </p>
-                <button class="btn doc"> Voir le document</button>
-            </div>
+            <div class="d-flex justify-content-around">
+                <?php $__currentLoopData = $product->docs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="text-center">
+                        <p class="font-weight-bold text-primary">
+                           <?php echo e($doc->name); ?></p>
+                        </p>
+                        <a href="<?php echo e(asset('pictures/Products/files/' . $doc->path)); ?>" target="_blank">
+                            <button class="btn doc"> Voir le document</button>
+                        </a>
+                      
+                    </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
+            </div>
         </div>
     </div>
-</div>
-    
-   
+
+
 
     
 
@@ -310,7 +310,7 @@
                                         <p class="font-weight-bold mb-1"><?php echo e($item->name); ?></p>
                                     </a>
 
-                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->category->name); ?></p>
+                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->category->name ?? 'no category'); ?></p>
                                     <div>
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>
