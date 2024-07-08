@@ -48,19 +48,35 @@
                                         <label for="">Photo : </label>
                                         <input class="form-control" type="file" name="picture" required>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="parent_id">Parent Category:</label>
-                                        <select id="parent_id" name="parent_id">
-                                            <option value="">No Parent</option>
-                                            <?php $__currentLoopData = $parentCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($category->id); ?>"
-                                                    <?php echo e(old('parent_id') == $category->id ? 'selected' : ''); ?>>
-                                                    <?php echo e(str_repeat('—', $category->level)); ?> <?php echo e($category->name); ?>
+                                    <?php if($level > 0): ?>
+                                        <div id="sub-categories-container-1" class="my-4 col-6">
+                                            <label for="sub-cat-level-1">Categories Level 1</label>
+                                            <select name="parent_id" id="sub-cat-level-1" class="sub-cat">
+                                                <option value="">select parent level 1</option>
+                                                <?php $__currentLoopData = $cats1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </select>
+                                        </div>
+                                        <?php if($level > 1): ?>
+                                            <div id="sub-categories-container-2" class="my-4 col-6">
+                                                <label for="sub-cat-level-2">Categories Level 2</label>
+                                                <select name="parent_id" id="sub-cat-level-2" class="sub-cat">
+                                                    <option value="">select parent level 2</option>
+                                                </select>
+                                            </div>
+                                            <?php if($level > 2): ?>
+                                                <div id="sub-categories-container-3" class="my-4 col-6">
+                                                    <label for="sub-cat-level-3">Categories Level 3</label>
+                                                    <select name="parent_id" id="sub-cat-level-3" class="sub-cat">
+                                                        <option value="">select parent level 3</option>
+                                                    </select>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
 
-                                                </option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select>
-                                    </div>
+
                                     <div>
                                         <button type="submit" class="btn btn-primary">Enregistrer</button>
                                     </div>
@@ -84,24 +100,38 @@
                             class="bi bi-search text-primary text-black fs-5 "></i></button>
                 </form>
             </div>
-            <div class="filter-selects">
+            <div class="d-flex col-5">
                 <?php if($level > 0): ?>
-                    <form action="<?php echo e(route('categories.filter', ['level' => $level])); ?>" method="post">
+                    <form action="<?php echo e(route('categories.filter', ['level' => $level])); ?>" method="post" class="d-flex align-items-center">
                         <?php echo csrf_field(); ?>
-                        <div class="form-group">
-                            <input type="hidden" name="level" value="<?php echo e($level); ?>">
-                            <label for="parent_category">Parent Category:</label>
-                            <select id="parent_category" name="parent_category">
-                                <option value="">All</option>
-                                <?php $__currentLoopData = $parentCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($category->id); ?>"
-                                        <?php echo e(old('parent_category') == $category->id ? 'selected' : ''); ?>>
-                                        <?php echo e(str_repeat('—', $category->level)); ?> <?php echo e($category->name); ?>
-
-                                    </option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
-                        </div>
+                        
+                        <?php if($level > 0): ?>
+                                        <div id="sub-categories-container-1" >
+                                            <select name="parent_category" id="level-1" class="sub-cat">
+                                                <option value="">L 1</option>
+                                                <?php $__currentLoopData = $cats1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </select>
+                                        </div>
+                                        <?php if($level > 1): ?>
+                                            <div id="sub-categories-container-2" class="my-4 ">
+                                               
+                                                
+                                                <select name="parent_category" id="level-2" class="sub-cat">
+                                                    <option value="">L 2</option>
+                                                </select>
+                                            </div>
+                                            <?php if($level > 2): ?>
+                                                <div id="sub-categories-container-3" class="my-4 ">
+                                                  
+                                                    <select name="parent_category" id="level-3" class="sub-cat">
+                                                        <option value="">L 3</option>
+                                                    </select>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </form>
                 <?php endif; ?>
@@ -117,6 +147,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Image</th>
+                    <th scope="col">Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,6 +160,13 @@
                         <td><?php echo e($category->name); ?></td>
                         <td>
                             <img src="<?php echo e(asset('storage/' . $category->picture)); ?>" alt="category image" width="50">
+                        </td>
+                        <td>
+                            <a href="<?php echo e(route('categories.edit', $category->id)); ?>" target="_blanck">
+                                <button class="btn btn-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -158,7 +196,7 @@
             } else {
                 suppBtn.disabled = false;
                 count1.innerHTML = "(" + selectedItems.length +
-                ")"; // Set the actual number or use `selectedItems.length`
+                    ")"; // Set the actual number or use `selectedItems.length`
             }
         }
 
@@ -206,6 +244,90 @@
                         console.log(xhr.responseText);
                     }
                 });
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        function loadChildren(parentId, level) {
+            // Find the next level
+            let nextLevel = level + 1;
+            if (nextLevel > 4) return;
+
+            // Select the next level element
+            let nextSelectElement = $(`#sub-cat-level-${nextLevel}`);
+            nextSelectElement.html(''); // Clear previous options
+
+            // Perform AJAX request to load children categories
+            $.ajax({
+                type: 'GET',
+                url: `/categories/children/${parentId}`,
+                success: function(data) {
+                    $.each(data, function(index, category) {
+                        nextSelectElement.append('<option value="' + category.id + '">' + category.name + '</option>');
+                    });
+                }
+            });
+        }
+
+        // Attach change event handlers to each select element
+        $('.sub-cat').on('change', function(e) {
+            let selectedParentId = $(this).val();
+            let currentLevel = parseInt(this.id.split('-').pop());
+
+            // Clear all subsequent levels
+            for (let level = currentLevel + 1; level <= 4; level++) {
+                $(`#sub-cat-level-${level}`).html('');
+            }
+
+            // Load children for the next level
+            if (selectedParentId) {
+                loadChildren(selectedParentId, currentLevel);
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+
+        function loadChildren(parentId, level) {
+            // Find the next level
+            let nextLevel = level + 1;
+            if (nextLevel > 4) return;
+
+            // Select the next level element
+            let nextSelectElement = $(`#level-${nextLevel}`);
+            nextSelectElement.html(''); // Clear previous options
+
+            // Perform AJAX request to load children categories
+            $.ajax({
+                type: 'GET',
+                url: `/categories/children/${parentId}`,
+                success: function(data) {
+                    $.each(data, function(index, category) {
+                        nextSelectElement.append('<option value="' + category.id + '">' + category.name + '</option>');
+                    });
+                }
+            });
+        }
+
+        // Attach change event handlers to each select element
+        $('.sub-cat').on('change', function(e) {
+            let selectedParentId = $(this).val();
+            let currentLevel = parseInt(this.id.split('-').pop());
+
+            // Clear all subsequent levels
+            for (let level = currentLevel + 1; level <= 4; level++) {
+                $(`#level-${level}`).html('');
+            }
+
+            // Load children for the next level
+            if (selectedParentId) {
+                loadChildren(selectedParentId, currentLevel);
             }
         });
     });

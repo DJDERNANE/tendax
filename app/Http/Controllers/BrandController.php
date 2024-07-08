@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class BrandController extends Controller
 {
@@ -119,9 +121,38 @@ class BrandController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
-    {
-        $ids = $request->input('ids');
-        $SubCategory = SubCategory::whereIn('id', $ids)->delete();
-        return response()->json(['message' => 'Successfully deleted categories and their pictures.']);
+{
+    $ids = $request->input('ids');
+    Log::info('Request to delete categories received.', ['ids' => $ids]);
+
+    $categories = Brand::whereIn('id', $ids)->get();
+
+    foreach ($categories as $category) {
+        $imagePath = 'Brand/' . $category->picture;
+        Log::info('Processing category.', ['id' => $category->id, 'imagePath' => $imagePath]);
+
+        // Delete the file from the 'pictures' disk
+        if (Storage::disk('pictures')->exists($imagePath)) {
+            Storage::disk('pictures')->delete($imagePath);
+            Log::info('Deleted picture from pictures disk.', ['imagePath' => $imagePath]);
+        } else {
+            Log::warning('Picture not found on pictures disk.', ['imagePath' => $imagePath]);
+        }
+
+        // Delete the file from the default disk (e.g., 'public')
+        if (Storage::exists($imagePath)) {
+            Storage::delete($imagePath);
+            Log::info('Deleted picture from default disk.', ['imagePath' => $imagePath]);
+        } else {
+            Log::warning('Picture not found on default disk.', ['imagePath' => $imagePath]);
+        }
+
+        // Delete the record from the database
+        $category->delete();
+        Log::info('Deleted category from database.', ['id' => $category->id]);
     }
+
+    Log::info('Successfully deleted categories and their pictures.', ['ids' => $ids]);
+    return response()->json(['message' => 'Successfully deleted categories and their pictures.']);
+}
 }

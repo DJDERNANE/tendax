@@ -189,6 +189,7 @@ class CategoryController extends Controller
 
     public function showLevel($level)
     {
+        $cats1 = Category::where('parent_id', null)->get();
       
         // Fetch categories for the specified level
         $categories = Category::where('level', $level)->paginate(10);
@@ -196,18 +197,19 @@ class CategoryController extends Controller
         // Fetch parent categories for the filter (only if level is greater than 1)
         $parentCategories = $level > 0 ? Category::where('level', $level-1)->get() : [];
 
-        return view('admin.store.level', compact('categories', 'level', 'parentCategories'));
+        return view('admin.store.level', compact('categories', 'level', 'cats1', 'parentCategories'));
     }
     public function filterLevel(Request $request)
     {
         $level = $request->level;
+        $cats1 = Category::where('parent_id', null)->get();
         // Fetch categories for the specified level
         $categories = Category::where('parent_id', $request->parent_category)->paginate(10);
 
         // Fetch parent categories for the filter (only if level is greater than 1)
         $parentCategories = $level > 0 ? Category::where('level', $level-1)->get() : [];
 
-        return view('admin.store.level', compact('categories', 'level', 'parentCategories'));
+        return view('admin.store.level', compact('categories', 'level', 'cats1','parentCategories'));
     }
 
     public function getChildCategories($parentId)
