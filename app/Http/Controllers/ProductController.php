@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Store;
+use App\Models\Wilaya;
 use App\Models\User;
 use App\Models\Photo;
 use App\Models\Document;
@@ -53,16 +55,17 @@ class ProductController extends Controller
 
         // Get the points from the latest subscription
         $score = $latestSubscription->points;
+        $cats1 = Category::where('parent_id', null)->get();
 
         // Return the view with products and score
-        return view('store.panel.products', compact('products', 'score'));
+        return view('store.panel.products', compact('products', 'score', 'cats1'));
     }
 
     public function pending()
     {
        // Retrieve the currently authenticated user
         $user = User::where('id', Auth::id())->first();
-        
+        $cats1 = Category::where('parent_id', null)->get();
         // Check if the user exists
         if (!$user) {
             // Handle the case where the user is not found
@@ -93,7 +96,7 @@ class ProductController extends Controller
         $score = $latestSubscription->points;
 
         // Return the view with products and score
-        return view('store.panel.pendingProducts', compact('products', 'score'));
+        return view('store.panel.pendingProducts', compact('products', 'score', 'cats1'));
     }
 
     /**
@@ -369,9 +372,41 @@ class ProductController extends Controller
         //
     }
 
-    public function adminProductsAccepted(){
-        $products = Product::where('accepted', true)->get();
-        return view('admin.store.products', compact('products'));
+    public function adminProductsAccepted(Request $request){
+        $query = Product::where('accepted', true)->with('categories');
+
+    // Filter by category if selected
+    if ($request->has('product_name') && $request->product_name != '') {
+        $productName = $request->product_name;
+        Log::info('Filtering by product name', ['product_name' => $productName]);
+        $query->where('name', 'like', '%' . $productName . '%');
+    }
+    if ($request->has('category_id') && $request->category_id != '') {
+        
+    }
+
+    // Filter by brand if selected
+    if ($request->has('brand_id') && $request->brand_id != '') {
+        $brandId = $request->brand_id;
+        $query->where('brand_id', $brandId);
+    }
+
+    // Filter by store if selected
+    if ($request->has('store_id') && $request->store_id != '') {
+        $storeId = $request->store_id;
+        $query->where('store_id', $storeId);
+    }
+
+    // Retrieve filtered products
+    $products = $query->get();
+    Log::info('Filtering by category', ['category_id' => $products]);
+
+    $cats1 = Category::where('parent_id', null)->get();
+    $stores = Store::all();
+    $wilayas = Wilaya::all();
+    $brands = Brand::all();
+
+    return view('admin.store.products', compact('products', 'cats1', 'stores', 'wilayas', 'brands'));
     }
     public function adminProductsPending(){
         $products = Product::where('accepted', false)->get();

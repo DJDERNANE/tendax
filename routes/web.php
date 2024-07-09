@@ -270,9 +270,10 @@ Route::group(['prefix' => 'admin',  'middleware' => 'admin'], function() {
     Route::get('/offretraite',[GroupParticipantController::class, 'activeGroups'])->name('admin.offretraite');
     Route::get('/groupMembers/{offre}',[GroupParticipantController::class, 'show'])->name('groupMembers');
     Route::get('/grouped/{offre}',[GroupParticipantController::class, 'update'])->name('grouped');
-
+    
 
     Route::get('/users',[UsersController::class, 'index'])->name('admin.users');
+    Route::get('/products/filter', [ProductController::class, 'adminProductsAccepted'])->name('products.filter');
     Route::get('/product/add', [ProductController::class, 'adminCreate'])->name('admin.products.create');
     Route::post('/product/store', [ProductController::class, 'store'])->name('admin.products.store');
     Route::post('/users/etat/{user}',[UsersController::class, 'update_etat'])->name('admin.user.etat');
