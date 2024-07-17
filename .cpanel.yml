@@ -1,0 +1,14 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/tendax20/dev.tendaxe.com
+    - /bin/cp -r * $DEPLOYPATH
+    - /bin/cp -r .[^.]* $DEPLOYPATH
+    - cd $DEPLOYPATH
+    - /usr/local/bin/composer install --no-dev --prefer-dist
+    - cp .env.example .env
+    - php artisan key:generate
+    - php artisan migrate --force
+    - php artisan config:cache
+    - php artisan route:cache
+    - php artisan view:cache
