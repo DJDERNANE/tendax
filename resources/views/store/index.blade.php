@@ -79,7 +79,7 @@
                                         <p class="font-weight-bold mb-1">{{ $item->name }}</p>
                                     </a>
 
-                                    <p class="marque mb-1"><span>Marque </span>{{ $item->brand->name }}</p>
+                                    <p class="marque mb-1"><span>Marque </span>{{ $item->brand->name ?? ''}}</p>
                                     <div>
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>
@@ -243,7 +243,9 @@
                         </div>
 
                         <div class="form-group text-right">
-                            <button class="btn btn-primary">Demander facture proforma</button>
+                            <a href="{{route('facteurProforma.store')}}">
+                                <button class="btn btn-primary">Demander facture proforma</button>
+                            </a>
                         </div>
                     </form>
                 </div>

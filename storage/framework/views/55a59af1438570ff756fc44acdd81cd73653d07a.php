@@ -21,10 +21,15 @@
                                 value="<?php echo e($product->ref); ?>" name="ref">
                         </div>
 
-                        <div class="my-4 col-7">
+                        <div class="my-4 col-6">
                             <label for="boutique">Boutique</label> <br>
                             <input type="text" class="px-2 py-1 bg-light border-0 rounded my-2" id="ref"
                                 value="<?php echo e($product->store->storeName); ?>" name="boutique" readonly>
+                        </div>
+                        <div class="my-4 col-6">
+                            <label for="boutique">Valeur</label> <br>
+                            <input type="text" class="px-2 py-1 bg-light border-0 rounded my-2" id="ref"
+                                value="<?php echo e($product->valeur); ?>" name="valeur" >
                         </div>
                         <div class="col-5">
                             

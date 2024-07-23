@@ -7,7 +7,8 @@
     <a href="{{route('stores.pending')}}" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Boutiques</span>  </a>
     <a href="{{route('orders.unactive')}}" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Commandes</span>  </a>
     <a href="{{route('products.pending.all')}}" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Produits</span>  </a>
-    <a href="{{route('Proforma.all')}}" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Facteurs Proforma</span>  </a>
+    <a href="{{route('factureperforma')}}" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Facteurs Proforma</span>  </a>
+    <a href="{{route('pubs')}}" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Pubs</span>  </a>
    
   </div>
 </div>

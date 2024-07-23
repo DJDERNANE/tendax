@@ -93,10 +93,9 @@
             <thead>
               <tr>
                 <th scope="col">Num</th>
-                <th scope="col">Montant</th>
-                <th scope="col">Montant payée</th>
-               
+                <th scope="col">Montant</th> 
                 <th scope="col">Client</th>
+                <th scope="col">Telephone</th>
                 <th scope="col">Date</th>
                 <th scope="col">Status</th>
                 {{-- <th scope="col">Bon/facture</th> --}}
@@ -108,7 +107,8 @@
                     <td>{{$item->id}}</td>
                     <td> {{$item->price}} DA</td>
                     <td>250000 DA</td>
-                    <td>{{$item->order->user->nom}}</td>
+                    <td>{{$item->order->user->nom}} {{$item->order->user->prenom}}</td>
+                    <td>{{$item->order->user->phone}}</td>
                     <td>{{$item->order->created_at}}</td>
                     <td>
                         <select name="" id="">

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FavoritController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FacteurProformaController;
+use App\Http\Controllers\PubController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
@@ -122,8 +123,9 @@ Route::middleware(['auth', 'EmailVerified', 'SessionLimiter'])->group(function (
     /// Group 
     Route::get('/participer/{offre}', [GroupParticipantController::class, 'store'])->name('participer');
 
-
-
+// create store
+    Route::get('/create',[StoreController::class, 'createStore'] )->name('store.create');
+    Route::post('/store/store',[StoreController::class, 'saveStore'] )->name('store.save');
 
     // Store ////////
         ///cart
@@ -238,8 +240,14 @@ Route::group(['prefix' => 'admin',  'middleware' => 'adminpanel'], function()
         Route::post('/products/update/{product}',[ProductController::class, 'adminUpdate'])->name('admin.product.update');
         Route::get('/products/edit/{product}',[ProductController::class, 'adminEdit'])->name('admin.product.edit');
         // facteurs proforma
-    
-        Route::get('/facteurs',[FacteurProformaController::class, 'index'])->name('Proforma.all');
+        Route::get('/facteurs/all',[FacteurProformaController::class, 'index'])->name('factureperforma');
+        Route::get('/facteurs/{facteurProforma}',[FacteurProformaController::class, 'show'])->name('facture.show');
+
+        //Pubs =
+        Route::get('/pubs/all',[PubController::class, 'index'])->name('pubs');
+        Route::post('/pubs/store',[PubController::class, 'store'])->name('pubs.store');
+        Route::post('/pubs/filter',[PubController::class, 'filterZone'])->name('pubs.filter');
+        Route::delete('/pubs/delete',[PubController::class, 'destroy'])->name('pubs.delete');
     ///////////////
     });
     //category
@@ -354,9 +362,8 @@ Route::group(['prefix' => 'store',  'middleware' => ['auth','storeAbonnement']],
     //Settings
     Route::get('/settings', function () {return view('store.panel.settings');})->name('settings');
 
-    // create store
-    Route::get('/create',[StoreController::class, 'createStore'] )->name('store.create');
-    Route::post('/store/store',[StoreController::class, 'saveStore'] )->name('store.save');
+    
+   
 });
 
 Route::post('/logout',[LogoutController::class, 'index'])->name('logout')->middleware('auth');

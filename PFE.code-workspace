@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "D:/PFE"
+		},
+		{
+			"path": "D:/DEV APP"
+		},
+		{
+			"path": "D:/Dev Web"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../Users/يسيرصثب/Downloads/TendAxe-documents"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "TendAxe-documents"
+	}
+}

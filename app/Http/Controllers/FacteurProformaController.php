@@ -15,9 +15,9 @@ class FacteurProformaController extends Controller
      */
     public function index()
     {
-        // $facteurs = FacteurProforma::all();
-        // return view('admin.store.facteurProforma', compact('facteurs'));
-        return 'ok';
+        $facteurs = FacteurProforma::all();
+        return view('admin.store.facteurProforma', compact('facteurs'));
+       
     }
 
     /**
@@ -69,7 +69,7 @@ class FacteurProformaController extends Controller
      */
     public function show(FacteurProforma $facteurProforma)
     {
-        //
+        return view('admin.store.factureDetails', compact('facteurProforma'));
     }
 
     /**

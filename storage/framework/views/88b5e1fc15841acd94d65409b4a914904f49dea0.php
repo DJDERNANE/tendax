@@ -7,7 +7,8 @@
     <a href="<?php echo e(route('stores.pending')); ?>" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Boutiques</span>  </a>
     <a href="<?php echo e(route('orders.unactive')); ?>" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Commandes</span>  </a>
     <a href="<?php echo e(route('products.pending.all')); ?>" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Produits</span>  </a>
-    <a href="<?php echo e(route('Proforma.all')); ?>" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Facteurs Proforma</span>  </a>
+    <a href="<?php echo e(route('factureperforma')); ?>" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Facteurs Proforma</span>  </a>
+    <a href="<?php echo e(route('pubs')); ?>" class="list-group-item list-group-item-action "><i class="bi bi-box-seam-fill"></i> <span>Pubs</span>  </a>
    
   </div>
 </div>

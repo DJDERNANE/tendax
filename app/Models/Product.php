@@ -21,7 +21,8 @@ class Product extends Model
         'satrtOn',
         'endOn',
         'accepted',
-        'store_id'
+        'store_id',
+        'valeur'
     ];
 
     public function categories()

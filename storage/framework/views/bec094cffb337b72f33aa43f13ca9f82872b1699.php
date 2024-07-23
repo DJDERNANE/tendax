@@ -2,8 +2,8 @@
 
 <?php $__env->startSection('title', 'Order Details'); ?>
 <?php $__env->startSection('content'); ?>
-    <div class="container my-4">
-        <div class="d-flex justify-content-between ">
+    <div class="container my-5 pt-5">
+        <div class="d-flex justify-content-between mt-2">
             <h6>Order Detaild</h6>
             <button class="btn btn-success rounded-3 supp-btn" disabled id="supp-btn">Accepter <span
                     id="count1"></span></button>

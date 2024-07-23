@@ -60,6 +60,8 @@
                 <tr>
                     <th scope="col">id</th>
                     <th scope="col">user</th>
+                    <th scope="col">Telephone</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Total</th>    
                     <th scope="col">Details</th>
                    
@@ -69,7 +71,9 @@
                 @foreach ($orders as $item)
                     <tr>
                         <th scope="row">{{ $item->id }}</th>
-                        <th scope="row">{{ $item->user->nom }}</th>
+                        <th scope="row">{{ $item->user->nom }} {{ $item->user->prenom }}</th>
+                        <th scope="row">{{ $item->user->phone }}</th>
+                        <th scope="row">{{ $item->user->email }}</th>
                         <th scope="row">{{ $item->total_price }}</th>
                         <td>
                             <a href="{{route('orders.details', $item->id)}}">

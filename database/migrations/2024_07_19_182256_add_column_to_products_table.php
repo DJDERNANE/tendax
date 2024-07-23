@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIconToCategoriesTable extends Migration
+class AddColumnToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddIconToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('icon')->default('');
+        Schema::table('products', function (Blueprint $table) {
+            $table->integer('valeur')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AddIconToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('icon');
+        Schema::table('products', function (Blueprint $table) {
+            //
         });
     }
 }

@@ -51,6 +51,7 @@ class StoreController extends Controller
     }
     public function createStore(){
         return view('createStore');
+
     }
 
     public function saveStore(Request $request){
@@ -132,6 +133,7 @@ class StoreController extends Controller
         }
 
         $store->storeName =  $request->nom;
+        $store->valeur =  $request->valeur;
 
         $store->save();
         

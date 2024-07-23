@@ -2,7 +2,7 @@
 
 <?php $__env->startSection('title', 'orders'); ?>
 <?php $__env->startSection('content'); ?>
-    <div class="container my-4">
+    <div class="container my-5 pt-5">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
                 <h6><a href="" class="me-2 active">Orders</a> </h6>
@@ -60,6 +60,8 @@
                 <tr>
                     <th scope="col">id</th>
                     <th scope="col">user</th>
+                    <th scope="col">Telephone</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Total</th>    
                     <th scope="col">Details</th>
                    
@@ -69,7 +71,9 @@
                 <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                         <th scope="row"><?php echo e($item->id); ?></th>
-                        <th scope="row"><?php echo e($item->user->nom); ?></th>
+                        <th scope="row"><?php echo e($item->user->nom); ?> <?php echo e($item->user->prenom); ?></th>
+                        <th scope="row"><?php echo e($item->user->phone); ?></th>
+                        <th scope="row"><?php echo e($item->user->email); ?></th>
                         <th scope="row"><?php echo e($item->total_price); ?></th>
                         <td>
                             <a href="<?php echo e(route('orders.details', $item->id)); ?>">

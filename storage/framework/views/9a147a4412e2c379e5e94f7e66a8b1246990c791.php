@@ -41,7 +41,7 @@
                                 Reference</button>
                         </div>
 
-                        <div class="my-4 col-7">
+                        <div class="my-4 col-6">
                             <label for="boutique">Boutique</label> <br>
                             <select name="boutique" id="boutique" class="px-2 py-2 bg-light border-0 rounded my-2"> <br>
                                 <option value="" selected>Selectionner</option>
@@ -50,6 +50,11 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                             </select>
+                        </div>
+
+                        <div class="my-4 col-6">
+                            <label for="boutique">Valeur</label> <br>
+                           <input  class="px-2 py-1 bg-light border-0 rounded my-2" type="text" name="valeur" value='0'>
                         </div>
                         <div class="col-5">
                             

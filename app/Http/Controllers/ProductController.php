@@ -103,7 +103,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $cats = Category::where('parent_id', null)->get();
+        $cats1 = Category::where('parent_id', null)->get();
+     
         $brands = Brand::all();
         $user =  User::where('id',Auth::id())->get()->first();
 
@@ -111,7 +112,7 @@ class ProductController extends Controller
     
         
 
-        return view('store.panel.addProduct', compact(['brands','cats', 'stores']));
+        return view('store.panel.addProduct', compact(['brands','cats1', 'stores']));
         //return $stores;
     }
 
@@ -162,7 +163,8 @@ class ProductController extends Controller
             'satrtOn' => $request->debut,
             'endOn' => $request->fin,
             'store_id' => $userstore,
-            'accepted' => $accepted
+            'accepted' => $accepted,
+            'valeur' => $request->valeur
         ]);
 
         Log::info('Product created.', ['product_id' => $product->id]);
@@ -350,6 +352,7 @@ class ProductController extends Controller
             'discount' => $request->discount,
             'satrtOn' => $request->debut,
             'endOn' => $request->fin,
+            'valeur' => $request->valeur
         ]);
         $product->save();
 

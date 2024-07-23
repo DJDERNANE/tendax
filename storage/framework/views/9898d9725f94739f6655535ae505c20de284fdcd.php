@@ -3,7 +3,7 @@
 <?php $__env->startSection('title', 'Facteurs Proforma'); ?>
 <?php $__env->startSection('content'); ?>
 
-    <div class="container my-4">
+    <div class="container my-5 pt-5">
         <div  class="d-flex justify-content-between align-items-center">
             <h3>Facteurs Proforma</h3>
             <div>
@@ -49,7 +49,7 @@
                 <th scope="row"><?php echo e($item->email); ?></th>
                 <th scope="row"><?php echo e($item->phone); ?></th>
                 <th scope="row">
-                    <a href="">
+                    <a href="<?php echo e(route('facture.show', $item->id)); ?>">
                         <button class="btn btn-primary">
                             Voir
                         </button>

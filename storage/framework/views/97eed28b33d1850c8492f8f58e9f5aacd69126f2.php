@@ -94,7 +94,7 @@
                                         <p class="font-weight-bold mb-1"><?php echo e($item->name); ?></p>
                                     </a>
 
-                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->brand->name); ?></p>
+                                    <p class="marque mb-1"><span>Marque </span><?php echo e($item->brand->name ?? ''); ?></p>
                                     <div>
                                         <i class="bi bi-star-fill"></i>
                                         <i class="bi bi-star-fill"></i>
@@ -258,7 +258,9 @@
                         </div>
 
                         <div class="form-group text-right">
-                            <button class="btn btn-primary">Demander facture proforma</button>
+                            <a href="<?php echo e(route('facteurProforma.store')); ?>">
+                                <button class="btn btn-primary">Demander facture proforma</button>
+                            </a>
                         </div>
                     </form>
                 </div>

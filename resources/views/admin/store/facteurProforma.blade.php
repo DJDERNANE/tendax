@@ -77,7 +77,7 @@
                 <th scope="row">{{$item->email}}</th>
                 <th scope="row">{{$item->phone}}</th>
                 <th scope="row">
-                    <a href="">
+                    <a href="{{route('facture.show', $item->id)}}">
                         <button class="btn btn-primary">
                             Voir
                         </button>
